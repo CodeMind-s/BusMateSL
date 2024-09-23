@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map with Geocoding</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <style>
+        body, html, #map { height: 100%; margin: 0; padding: 0; }
+        .locationbtn{
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        .map{
+            position: relative;
+            height: 100vh;
+            width: auto;
+
+        }
+        .dot{
+            position: relative;
+            width: 16px;
+            height: 16px;
+            background-color: #008000;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF;
+        }
+        .dotinner{
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            border: 4px solid #3b6ce72b ;
+        }
+       
+    </style>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+</head>
+<body>
+    <input id="input" type="text" name="input" onblur="r(this.value)"/>
+    <div class=" map">
+        <div id="map"></div>
+        <div class="locationbtn">you</div>
+    </div>
+    <script>
+        // Initialize the map
+        const mymap = L.map('map').setView([6.246626, 80.517881], 12);
+
+        // Add tile layers from OpenStreetMap
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(mymap);
+
+        // Variable to hold the routing control
+        let routingControl;
+
+        // Define the routing function
+        const r = (location) => {
+            g(location).then(latLng => {
+                if (latLng) {
+                    // If there's an existing routing control, remove it
+                    if (routingControl) {
+                        mymap.removeControl(routingControl);
+                    }
+
+                    // Create a new routing control
+                    routingControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(6.747721, 80.501112), // Starting point
+                            latLng // Geocoded destination
+                        ],
+                        routeWhileDragging: true,
+                        lineOptions: {
+                            styles: [{ color: '#3B6DE7', opacity: 0.8, weight: 5 }] // Blue route color
+                        }
+                    }).addTo(mymap);
+                } else {
+                    console.log('Could not get coordinates for routing.');
+                }
+            });
+        }
+
+        // Geocoding function
+        const g = (location) => {
+            return new Promise((resolve) => {
+                L.Control.Geocoder.nominatim().geocode(location, function(results) {
+                    if (results.length > 0) {
+                        const latLng = results[0].center;
+                        resolve(latLng);
+                    } else {
+                        console.log('No results found');
+                        resolve(null);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

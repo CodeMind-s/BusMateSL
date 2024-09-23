@@ -1,8 +1,25 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Keyboard  } from 'react-native'
 import { router, Tabs } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useEffect, useState } from 'react';
 
 const TabLayout = () => {
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  
   return (
     <Tabs screenOptions={{
         headerStyle: {
@@ -21,7 +38,8 @@ const TabLayout = () => {
         tabBarInactiveTintColor: "#23252E",
         tabBarStyle:{
             backgroundColor: "#FFFFFF",
-            justifyContent: "center"
+            justifyContent: "center",
+            display: isKeyboardVisible ? 'none' : 'flex',
         },
         tabBarIconStyle:{
             marginTop: 5,
@@ -49,6 +67,7 @@ const TabLayout = () => {
       options={{
         title: 'Track Details',
         tabBarLabel: "Track Bus",
+        headerRight: ()=><TouchableOpacity className=' mr-5'><Ionicons name="search" size={28} color="white" /></TouchableOpacity>,
         tabBarIcon: ({color,size})=><Ionicons name="location-sharp" size={size} color={color} />
       }}
     />
