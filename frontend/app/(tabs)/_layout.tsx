@@ -73,9 +73,9 @@ const TabLayout = () => {
     />
 
     <Tabs.Screen
-      name="tikets/index"
+      name="tickets/index"
       options={{
-        title: 'Tikets',
+        title: 'Tickets',
         tabBarLabel: "Tikets",
         tabBarIcon: ({color,size})=><Ionicons name="ticket" size={size} color={color} />
       }}

@@ -42,7 +42,7 @@ const TrackbusScreen = () => {
       setMarkersScript(`
         const userLocation = [${location?.latitude}, ${location?.longitude}];
         L.marker(userLocation, { icon: userLocationIcon }).addTo(mymap).bindPopup('Your Location');
-        mymap.setView(userLocation, 11);
+        mymap.setView(userLocation, 12);
       `);
     }
     else{
@@ -51,7 +51,7 @@ const TrackbusScreen = () => {
   }
 
   useEffect(() => {
-    if (!location) return;
+    // if (!location) return;
     const mapHTML = `
       <!DOCTYPE html>
       <html>
