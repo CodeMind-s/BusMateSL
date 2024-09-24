@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Linking, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { SearchContext } from '../../contexts/SearchContext';
 
 interface LocationCoords {
   latitude: number;
@@ -15,7 +15,10 @@ const TrackbusScreen = () => {
   const [userLocationIsOn, setUserLocationOn] = useState(false);
   const [markersScript, setMarkersScript] = useState('');
   const [leafletHTML, setLeafletHTML] = useState('');
+  const { isSearchActive } = useContext(SearchContext);
+  const [isSosOn, setIsSosOn] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  
 
   useEffect(() => {
     const getLocation = async () => {
@@ -151,7 +154,11 @@ const TrackbusScreen = () => {
     setLeafletHTML((prevHTML) => (prevHTML !== mapHTML ? mapHTML : prevHTML));
   }, [location, userLocationIsOn, markersScript]);
 
-
+  const handleCall = () => {
+    const phoneNumber = '119';
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+  
   return (
     <View className=' h-full relative'>
       <WebView
@@ -163,11 +170,58 @@ const TrackbusScreen = () => {
         <TouchableOpacity onPress={markUserLocation} className=' bg-white flex-1 items-center justify-center h-[35px] w-[35px] rounded-full mb-4'>
           <Ionicons name="locate" size={28} color="#3B6DE7" />
         </TouchableOpacity>
-        <TouchableOpacity className=' bg-red-600 flex-1 items-center justify-center h-[50px] w-[50px] rounded-full'>
+        <TouchableOpacity onPress={()=> setIsSosOn(true)} className=' bg-red-600 flex-1 items-center justify-center h-[50px] w-[50px] rounded-full'>
           <Text className=' text-white font-bold text-lg'>SOS</Text>
         </TouchableOpacity>
       </View>
 
+      {/* search box */}
+      {isSearchActive && (
+        <View className=' absolute -top-5 left-0 bg-Secondary flex flex-row justify-between pl-5 py-7 rounded-b-[20px]'>
+          <View className=' w-[85%]'>
+            <TextInput className=' bg-swhite mb-5 h-10 rounded-md'></TextInput>
+            <TextInput className=' bg-swhite h-10 rounded-md'></TextInput>
+          </View>
+          <TouchableOpacity className=' flex-1 justify-center items-center'>
+          <Ionicons name="repeat" size={30} color="white" />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* sos box */}
+      {isSosOn &&(
+        <View className=' absolute bottom-0 left-0 w-full p-6 rounded-t-3xl bg-swhite '>
+          <TouchableOpacity onPressIn={()=>setIsSosOn(false)} className=' absolute -top-5 left-[48%]'>
+            <Ionicons name="remove" size={70} color="#A6A6A6" />
+          </TouchableOpacity>
+          <Text className=' text-xl font-extrabold'>119 Assistance</Text>
+          <Text className=' text-[#6d6d6d] mt-1'>When you call 119, you trip details will be shared with police.<Text className='text-primary'> Change sharing settings</Text></Text>
+          <View className=' flex-1 flex-row mt-5'>
+            <View className=' flex justify-center items-center'>
+              <Ionicons name="location-outline" size={30} color="#3B6DE7" />
+            </View>
+            <View className='ml-5'>
+              <Text className=' text-base font-bold'>Police station - Kalaniya</Text>
+              <Text className=' text-xs text-[#A6A6A6]'>340 Biyagama Rd, Peliyagoda, Sri lanka</Text>
+            </View>
+          </View>
+          <View className=' flex-1 flex-row mt-4'>
+            <View className=' flex justify-center items-center'>
+              <Ionicons name="call" size={28} color="red" />
+            </View>
+            <View className='ml-5'>
+              <Text className=' text-base font-bold'>119</Text>
+              <Text className=' text-xs text-[#A6A6A6]'>Sri Lanka Police</Text>
+            </View>
+          </View>
+          <View className=' flex justify-center items-center mt-5'>
+            <TouchableOpacity onPress={handleCall} className=' bg-primary flex flex-row w-3/5 h-[50px] rounded-xl items-center justify-center'>
+              <Ionicons name="call" size={25} color="white" />
+              <Text className=' text-base font-semibold text-white ml-2'>Call 119</Text>
+            </TouchableOpacity>
+          </View>
+        </View> 
+      )}
     </View>
   )
 }

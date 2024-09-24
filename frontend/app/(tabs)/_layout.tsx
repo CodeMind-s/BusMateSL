@@ -1,7 +1,9 @@
 import { View, Text, TouchableOpacity, Keyboard  } from 'react-native'
 import { router, Tabs } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { SearchProvider } from '../../contexts/SearchContext';
+import { SearchContext } from '../../contexts/SearchContext';
 
 const TabLayout = () => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -21,12 +23,13 @@ const TabLayout = () => {
   }, []);
   
   return (
+    <SearchProvider>
     <Tabs screenOptions={{
         headerStyle: {
             backgroundColor: "#23252E", 
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
-            height: 100
+            height: 100,
         },
         headerTitleAlign: "center",
         headerTitleStyle: {
@@ -67,7 +70,14 @@ const TabLayout = () => {
       options={{
         title: 'Track Details',
         tabBarLabel: "Track Bus",
-        headerRight: ()=><TouchableOpacity className=' mr-5'><Ionicons name="search" size={28} color="white" /></TouchableOpacity>,
+        headerStyle:{
+          backgroundColor: "#23252E", 
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+          height: 100,
+          shadowColor: "#23252E",
+        },
+        headerRight: () => <SearchButton />,
         tabBarIcon: ({color,size})=><Ionicons name="location-sharp" size={size} color={color} />
       }}
     />
@@ -100,7 +110,23 @@ const TabLayout = () => {
       }}
     />
   </Tabs>
+  </SearchProvider>
   )
 }
+
+
+const SearchButton = () => {
+  const { isSearchActive, setIsSearchActive } = useContext(SearchContext);
+
+  const handleToggleSearch = () => {
+    setIsSearchActive(!isSearchActive); // Toggle between true and false
+  };
+
+  return (
+    <TouchableOpacity className='mr-5' onPress={handleToggleSearch}>
+      <Ionicons name="search" size={28} color="white" />
+    </TouchableOpacity>
+  );
+};
 
 export default TabLayout
