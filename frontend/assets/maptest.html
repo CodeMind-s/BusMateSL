@@ -8,19 +8,18 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <style>
         body, html, #map { height: 100%; margin: 0; padding: 0; }
-        .locationbtn{
+        .locationbtn {
             position: absolute;
             top: 0;
             right: 0;
             z-index: 1000;
         }
-        .map{
+        .map {
             position: relative;
             height: 100vh;
             width: auto;
-
         }
-        .dot{
+        .dot {
             position: relative;
             width: 16px;
             height: 16px;
@@ -28,25 +27,28 @@
             border-radius: 50%;
             border: 2px solid #FFFFFF;
         }
-        .dotinner{
+        .dotinner {
             position: absolute;
             top: 0%;
             left: 0%;
             width: 100%;
             height: 100%;
-            border: 4px solid #3b6ce72b ;
+            border: 4px solid #3b6ce72b;
         }
-       
     </style>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 </head>
 <body>
-    <input id="input" type="text" name="input" onblur="r(this.value)"/>
-    <div class=" map">
+    <form id="routeForm">
+        <input id="start" type="text" name="start" placeholder="Start location" />
+        <input id="destination" type="text" name="destination" placeholder="Destination" />
+        <button type="submit">Get Route</button>
+    </form>
+    <div class="map">
         <div id="map"></div>
-        <div class="locationbtn">you</div>
+        <div class="locationbtn">You</div>
     </div>
     <script>
         // Initialize the map
@@ -61,34 +63,28 @@
         // Variable to hold the routing control
         let routingControl;
 
-        // Define the routing function
-        const r = (location) => {
-            g(location).then(latLng => {
-                if (latLng) {
-                    // If there's an existing routing control, remove it
-                    if (routingControl) {
-                        mymap.removeControl(routingControl);
-                    }
+        // Function to update the route
+        const updateRoute = (startLatLng, destinationLatLng) => {
+            // If there's an existing routing control, remove it
+            if (routingControl) {
+                mymap.removeControl(routingControl);
+            }
 
-                    // Create a new routing control
-                    routingControl = L.Routing.control({
-                        waypoints: [
-                            L.latLng(6.747721, 80.501112), // Starting point
-                            latLng // Geocoded destination
-                        ],
-                        routeWhileDragging: true,
-                        lineOptions: {
-                            styles: [{ color: '#3B6DE7', opacity: 0.8, weight: 5 }] // Blue route color
-                        }
-                    }).addTo(mymap);
-                } else {
-                    console.log('Could not get coordinates for routing.');
+            // Create a new routing control with the provided waypoints
+            routingControl = L.Routing.control({
+                waypoints: [
+                    startLatLng, // Starting point
+                    destinationLatLng // Destination point
+                ],
+                routeWhileDragging: true,
+                lineOptions: {
+                    styles: [{ color: '#3B6DE7', opacity: 0.8, weight: 5 }] // Blue route color
                 }
-            });
-        }
+            }).addTo(mymap);
+        };
 
         // Geocoding function
-        const g = (location) => {
+        const geocodeLocation = (location) => {
             return new Promise((resolve) => {
                 L.Control.Geocoder.nominatim().geocode(location, function(results) {
                     if (results.length > 0) {
@@ -100,7 +96,26 @@
                     }
                 });
             });
-        }
+        };
+
+        // Form submit handler
+        document.getElementById('routeForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent form from submitting the default way
+
+            const startLocation = document.getElementById('start').value;
+            const destinationLocation = document.getElementById('destination').value;
+
+            // Geocode both start and destination locations
+            const startLatLng = await geocodeLocation(startLocation);
+            const destinationLatLng = await geocodeLocation(destinationLocation);
+
+            if (startLatLng && destinationLatLng) {
+                // Update the route with geocoded coordinates
+                updateRoute(startLatLng, destinationLatLng);
+            } else {
+                console.log('Could not get coordinates for routing.');
+            }
+        });
     </script>
 </body>
 </html>
