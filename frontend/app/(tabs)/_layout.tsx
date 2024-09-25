@@ -61,6 +61,7 @@ const TabLayout = () => {
       options={{
         title: 'Bus Mate SL',
         tabBarLabel: "Home",
+        headerLeft: ()=><TouchableOpacity></TouchableOpacity>,
         tabBarIcon: ({color,size})=><Ionicons name="home" size={size} color={color} />
       }}
     />
