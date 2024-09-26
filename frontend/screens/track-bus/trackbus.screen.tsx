@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
-import { Linking, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Linking, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { SearchContext } from '../../contexts/SearchContext';
@@ -15,6 +15,37 @@ interface SosModalProps {
   setIsSosOn: (isOn: boolean) => void;
 }
 
+interface BusArrivalInfoProps {
+  setIsBusClick: (value: boolean) => void;
+}
+
+interface BusInfoProps {
+  busNumber: string;
+  location: string;
+}
+
+interface Bus {
+  number: string;
+  currentTown: string;
+  routeNumber: number;
+  longitude: number;
+  magnitude: number;
+}
+
+interface Buses {
+  [key: string]: Bus;
+}
+
+interface BusdetailWindow {
+  setIsBusdetailWindowActive: (value: boolean) => void;
+}
+
+interface ArriwalTimeInfoProps {
+  town: string;
+  time: string;
+  pass: string;
+}
+
 const TrackbusScreen = () => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
   const [userLocationIsOn, setUserLocationOn] = useState(false);
@@ -23,11 +54,40 @@ const TrackbusScreen = () => {
   const { isSearchActive, setIsSearchActive } = useContext(SearchContext);
   const [isSosOn, setIsSosOn] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [isBusClick, setIsBusClick] = useState(false);
   const [startLocation, SetStartLocation] = useState('');
   const [destinationLocation, SetDestinationLocation] = useState('');
   const [isSearchResultActive, SetIsSearchResultActive] = useState(false);
   const [searchResult, setSearchResult] = useState('');
+  const [buses, setBuses] = useState<Buses>( {
+    1: {
+      number: "BD 1234",
+      currentTown: "Malabe",
+      routeNumber: 177,
+      longitude: 79.966899,
+      magnitude: 6.908134,
+    },
+    2: {
+      number: "DF 3425",
+      currentTown: "Koswatte",
+      routeNumber: 177,
+      longitude: 79.914199,
+      magnitude: 6.902851, 
+    },
+    3: {
+      number: "PK 1276",
+      currentTown: "Rajagiriya",
+      routeNumber: 177,
+      longitude: 79.876777,
+      magnitude: 6.911542, 
+    }});
+  const [busesInRoute, setBusesInRoute] = useState('');
+  const [isBusesInRouteActive, setIsBusesInRouteActive] = useState(false);
+  const [isBusClick, setIsBusClick] = useState(false);
+  const [isBusdetailWindowActive, setIsBusdetailWindowActive] = useState(false);
+
+
+
+
   
 
   useEffect(() => {
@@ -63,12 +123,11 @@ const TrackbusScreen = () => {
     }
   }
 
-  // const clickHandler = () =>{
-  //   setIsBusClick(!isBusClick);
-  // }   
-
   const searchHandler = () =>{
     setUserLocationOn(false);
+    setIsBusesInRouteActive(false);
+    setIsBusClick(false);
+    setIsBusdetailWindowActive(false);
     SetIsSearchResultActive(true);
     setSearchResult(`
       let routingControl;
@@ -134,6 +193,39 @@ const TrackbusScreen = () => {
     setIsSearchActive(false);
   }   
 
+  
+  const clickHandler = () => {
+    setIsBusClick(!isBusClick);
+    setIsBusdetailWindowActive(false);
+  };  
+
+  // useEffect(()=>{
+    const routeBusHandller = () =>{
+      SetIsSearchResultActive(false);
+      setIsBusesInRouteActive(true);
+      setIsBusdetailWindowActive(true);
+
+    if(startLocation=== 'Kaduwela' && destinationLocation==='Kollupitiya'){
+      const busMarkersScript = Object.keys(buses).map((busKey) => {
+        const bus = buses[busKey];
+        return `
+          const busLocation${busKey} = [${bus.magnitude}, ${bus.longitude}];
+          const marker${busKey} = L.marker(busLocation${busKey}, { icon: busIcon })
+            .addTo(mymap)
+            .bindPopup('<b>Route Number:</b>${bus.routeNumber}<br><b>Bus Number:</b> ${bus.number}<br><b>Town:</b> ${bus.currentTown}<br>');
+          mymap.setView(busLocation${busKey}, 12);
+          marker${busKey}.on('click', function() {
+          window.ReactNativeWebView.postMessage('markerClicked');
+        });
+        `;
+      }).join('\n');
+      setBusesInRoute((prevHTML) => (prevHTML !== busMarkersScript ? busMarkersScript : prevHTML));
+    }
+    else{
+      setBusesInRoute('');
+    }
+    };
+
   // const mark=`
   //       const userLocation = [6.934101, 79.859634];
   //       const marker = L.marker(userLocation, { icon: userLocationIcon }).addTo(mymap).bindPopup('Your Location');
@@ -194,6 +286,15 @@ const TrackbusScreen = () => {
                           </div>\`
               });
 
+              const busIcon = L.icon({
+                iconUrl: 'https://img.icons8.com/ios-filled/100/23252E/bus-2.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                iconSize: [41, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+              });
+
               L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                   maxZoom: 19,
                   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -208,6 +309,10 @@ const TrackbusScreen = () => {
               if(${isSearchResultActive}){
                 ${searchResult}
               }
+              
+              if(${isBusesInRouteActive}){
+                ${busesInRoute}
+              }
  
             </script>
         </body>
@@ -216,7 +321,7 @@ const TrackbusScreen = () => {
 
     setLeafletHTML((prevHTML) => (prevHTML !== mapHTML ? mapHTML : prevHTML));
 
-  }, [location, userLocationIsOn, markersScript, searchResult, isSearchResultActive]);
+  }, [location, userLocationIsOn, markersScript, searchResult, isSearchResultActive, isBusesInRouteActive]);
   
   return (
     <View className=' h-full relative'>
@@ -224,13 +329,14 @@ const TrackbusScreen = () => {
         originWhitelist={['*']}
         source={{ html: leafletHTML }}
         style={{ flex: 1 }}
-        // onMessage={(event) => {
-        //   if (event.nativeEvent.data === 'markerClicked') {
-        //     clickHandler(); // Call your click handler when the marker is clicked
-        //   }
-        // }}
+        onMessage={(event) => {
+          const message = event.nativeEvent.data;
+          if (message.startsWith('markerClicked')) {
+            clickHandler(); 
+          }
+        }}
       />
-      {!isSearchResultActive && (
+      {!isSearchResultActive && !isBusesInRouteActive && (
         <View className=' absolute bottom-3 right-2 flex justify-center items-center'>
           <TouchableOpacity onPress={markUserLocation} className=' bg-white flex-1 items-center justify-center h-[35px] w-[35px] rounded-full mb-4'>
             <Ionicons name="locate" size={28} color="#3B6DE7" />
@@ -241,15 +347,29 @@ const TrackbusScreen = () => {
         </View>
       )}
 
+      {isBusesInRouteActive && !isBusdetailWindowActive && (
+        <View className=' absolute bottom-3 right-2 flex justify-center items-center'>
+          <TouchableOpacity onPress={() => setIsBusdetailWindowActive(true)} className=' bg-white flex-1 items-center justify-center h-[35px] w-[35px] rounded-full mb-4'>
+            <Ionicons name="chevron-up" size={28} color="black" />
+          </TouchableOpacity>
+        </View>
+      )}
+
       {isSearchResultActive && (
         <TouchableOpacity onPress={()=>SetIsSearchResultActive(false)} className=' absolute top-12 right-2 flex justify-center items-center bg-swhite p-1 rounded-full shadow-xl shadow-black'>
           <Ionicons name="close-sharp" size={24} color="black" />
         </TouchableOpacity>
       )}
 
-      {isSearchResultActive && (
+      {isBusdetailWindowActive && (
+        <TouchableOpacity onPress={()=>SetIsSearchResultActive(false)} className=' absolute top-12 right-2 flex justify-center items-center bg-swhite p-1 rounded-full shadow-xl shadow-black'>
+          <Ionicons name="close-sharp" size={24} color="black" />
+        </TouchableOpacity>
+      )}
+
+      {isSearchResultActive && !isBusesInRouteActive && (
         <View className=' w-full absolute bottom-4 left-0 flex justify-center items-center'>
-          <TouchableOpacity className=' bg-primary h-16 w-11/12 rounded-lg flex flex-row justify-center items-center'>
+          <TouchableOpacity onPress={()=>routeBusHandller()} className=' bg-primary h-16 w-11/12 rounded-lg flex flex-row justify-center items-center'>
             <Text className=' text-center font-bold text-white text-2xl mr-5'>{startLocation} - {destinationLocation}</Text>
             <FontAwesome6 name="route" size={24} color="white" />
           </TouchableOpacity>
@@ -275,14 +395,16 @@ const TrackbusScreen = () => {
       )}
 
       {/* sos box */}
-      {isSosOn &&(
-         <SosModal setIsSosOn={setIsSosOn}/>
+      {isSosOn &&(<SosModal setIsSosOn={setIsSosOn}/>)}
+      
+      {isBusdetailWindowActive && startLocation==='Kaduwela' && destinationLocation==='Kollupitiya' && (
+        <BusdetailWindow setIsBusdetailWindowActive={setIsBusdetailWindowActive} />
       )}
-      {isBusClick&& <Text>clicked</Text>}
+
+      {isBusClick && <BusArrivalInfo setIsBusClick={setIsBusClick} />}
     </View>
   )
 }
-
 
 const SosModal: React.FC<SosModalProps> = ({ setIsSosOn }) => {
   const handleCall = () => {
@@ -322,6 +444,86 @@ const SosModal: React.FC<SosModalProps> = ({ setIsSosOn }) => {
             </TouchableOpacity>
           </View>
         </View>
+  );
+};
+
+const BusdetailWindow: React.FC<BusdetailWindow> = ({ setIsBusdetailWindowActive }) => {
+  return (
+    <View className='absolute bottom-0 left-0 w-full p-6 rounded-t-3xl bg-swhite'>
+      <TouchableOpacity onPressIn={() => setIsBusdetailWindowActive(false)} className='absolute -top-5 left-[48%]'>
+        <Ionicons name="remove" size={70} color="#A6A6A6" />
+      </TouchableOpacity>
+      <View className='flex flex-row items-center'>
+        <Image 
+          source={require('../../assets/trackbus/bus.jpeg')} 
+          className='h-14 w-14 rounded-full' 
+        />
+        <View className='w-[80%] pl-2'>
+          <Text className='text-primary text-lg font-bold'>177 Kaduwela - Kollupitiya</Text>
+          <Text className='text-[#A6A6A6] text-base'>Sri Lanka Transport Board</Text>
+        </View>
+      </View>
+      <View>
+        <BusInfo busNumber="PK 1276" location="Rajagiriya" />
+        <BusInfo busNumber="DF 3425" location="Koswatte" />
+        <BusInfo busNumber="BG 1234" location="Malabe" />
+      </View>
+    </View>
+  );
+};
+
+
+const BusInfo: React.FC<BusInfoProps> = ({ busNumber, location }) => {
+  return (
+    <View className='flex flex-row items-center justify-start mt-4'>
+      <Ionicons name="bus" size={30} color="#3B6DE7" />
+      <View className='w-[80%] pl-2'>
+        <Text className='text-black text-sm font-semibold'>{busNumber}</Text>
+        <Text className='text-[#A6A6A6] text-sm'>{location}</Text>
+      </View>
+    </View>
+  );
+};
+
+const BusArrivalInfo: React.FC<BusArrivalInfoProps> = ({ setIsBusClick }) => {
+  return (
+    <View className='absolute bottom-0 left-0 w-full p-6 rounded-t-3xl bg-swhite'>
+      <TouchableOpacity onPressIn={() => setIsBusClick(false)} className='absolute -top-5 left-[48%]'>
+        <Ionicons name="remove" size={70} color="#A6A6A6" />
+      </TouchableOpacity>
+      <View className='flex flex-row items-center'>
+        <Image 
+          source={require('../../assets/trackbus/bus.jpeg')} 
+          className='h-14 w-14 rounded-full' 
+        />
+        <View className='w-[80%] pl-2'>
+          <Text className='text-primary text-lg font-bold'>177 Kaduwela - Kollupitiya</Text>
+          <Text className='text-[#A6A6A6] text-base'>Sri Lanka Transport Board</Text>
+        </View>
+      </View>
+      <View className='mt-4'>
+        <ArrivalTime town='Kollupitiya (Station Road)' time='11.00 AM' pass='not'/>
+        <ArrivalTime town='Rajagiriya' time='10.30 AM' pass='not'/>
+        <ArrivalTime town='Koswatte' time='10.00 AM' pass='pass'/>
+        <ArrivalTime town='Malabe' time='9.30 AM' pass='pass'/>
+        <ArrivalTime town='Kaduwela' time='9.00 AM' pass='pass'/>
+      </View>
+    </View>
+  );
+};
+
+const ArrivalTime: React.FC<ArriwalTimeInfoProps> = ({ town, time, pass }) => {
+  return (
+    <View className=' flex flex-row mt-2'>
+      <View className=' relative'>
+        <View className={` h-4 w-4 ${pass === 'pass' ? 'bg-primary': 'bg-swhite'} border-primary border-2 rounded-full z-10`}></View>
+        <View className=' h-16 w-[3px] bg-primary/30 absolute top-0 left-[6px]'></View>
+      </View>
+      <View className=' ml-3'>
+        <Text className='text-black text-sm font-semibold'>{town}</Text>
+        <Text className='text-[#A6A6A6] text-sm'>{time}</Text>
+      </View>
+    </View>
   );
 };
 
