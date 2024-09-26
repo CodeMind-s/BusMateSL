@@ -1,11 +1,8 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import Home from '@/screens/home';
 
 const Index = () => {
   return (
-    <View className=' bg-swhite h-full w-full flex-1 justify-center items-center'>
-      <Text>Home Screen</Text>
-    </View>
+   <Home />
   )
 }
 

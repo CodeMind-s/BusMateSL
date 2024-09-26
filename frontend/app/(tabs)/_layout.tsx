@@ -52,6 +52,7 @@ const TabLayout = () => {
             marginTop: -3,
             marginBottom: 5,
         },
+        
         headerLeft: ()=><TouchableOpacity onPress={()=> router.back()} className=' ml-5'><Ionicons name="arrow-back-circle-outline" size={28} color="white" /></TouchableOpacity>
     }}
     >
@@ -110,6 +111,7 @@ const TabLayout = () => {
         
       }}
     />
+    
   </Tabs>
   </SearchProvider>
   )
