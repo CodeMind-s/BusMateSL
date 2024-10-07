@@ -7,6 +7,7 @@ module.exports = {
         primary: '#3B6DE7',
         Secondary: '#23252E',
         swhite: '#FAFDFF',
+        tertiary:'#EEEEEE',
       },
     },
   },
