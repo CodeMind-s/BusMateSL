@@ -201,7 +201,7 @@ const TrackbusScreen = () => {
 
   // useEffect(()=>{
     const routeBusHandller = () =>{
-      SetIsSearchResultActive(false);
+      // SetIsSearchResultActive(false);
       setIsBusesInRouteActive(true);
       setIsBusdetailWindowActive(true);
 
@@ -289,10 +289,10 @@ const TrackbusScreen = () => {
               const busIcon = L.icon({
                 iconUrl: 'https://img.icons8.com/ios-filled/100/23252E/bus-2.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-                iconSize: [41, 41],
-                iconAnchor: [12, 41],
+                iconSize: [21, 21],
+                iconAnchor: [12, 21],
                 popupAnchor: [1, -34],
-                shadowSize: [41, 41]
+                shadowSize: [21, 21]
               });
 
               L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -308,11 +308,11 @@ const TrackbusScreen = () => {
 
               if(${isSearchResultActive}){
                 ${searchResult}
+                if(${isBusesInRouteActive}){
+                  ${busesInRoute}
+                }
               }
               
-              if(${isBusesInRouteActive}){
-                ${busesInRoute}
-              }
  
             </script>
         </body>

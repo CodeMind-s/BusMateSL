@@ -57,9 +57,10 @@ const getAllBookings = asyncHandler(async (req, res) => {
 // @desc    Get all bookings for a user
 // @route   GET /api/bookings/user/:userId
 const getBookingsByUser = asyncHandler(async (req, res) => {
-  const bookings = await Booking.find(req.params.userId).populate(
+  // console.log(req.user);
+  const bookings = await Booking.find({ user: req.user._id }).populate(
     "schedule",
-    "bus startLocation startTime endLocation endTime"
+    "endLocation startLocation bus",
   );
 
   if (bookings.length > 0) {

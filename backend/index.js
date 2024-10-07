@@ -12,6 +12,8 @@ import busRoutes from "./routes/busRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
 import scheduleRoutes from "./routes/scheduleRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js"
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -52,5 +54,11 @@ app.use("/api/tickets", ticketRoutes);
 
 // Schedule Route
 app.use("/api/schedules", scheduleRoutes);
+
+// Payment Route
+app.use("/api/payments", paymentRoutes);
+
+// Notification Route
+app.use("/api/notifications", notificationRoutes);
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));

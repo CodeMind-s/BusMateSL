@@ -9,6 +9,7 @@ import {
   payForBooking,
   deleteBooking,
 } from "../controllers/bookingController.js";
+import { authenticate } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ const router = express.Router();
 router.route("/").post(createBooking).get(getAllBookings);
 
 // @desc    Get all bookings by user
-router.route("/mybookings").get(getBookingsByUser);
+router.route("/mybookings").get(authenticate, getBookingsByUser);
 
 // @desc    Get all bookings by bus
 router.route("/bus").get(getBookingsByBus);
