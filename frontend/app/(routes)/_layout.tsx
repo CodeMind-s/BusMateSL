@@ -69,6 +69,12 @@ const RouteScreenLayout = () => {
             header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedules"/>,
           }} 
         />
+        <Stack.Screen 
+          name="user_selection/index" 
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="user_selection"/>,
+          }} 
+        />
       </Stack>
     </SearchProvider>
   );
