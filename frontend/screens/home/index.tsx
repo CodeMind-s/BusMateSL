@@ -111,14 +111,14 @@ const Home = () => {
           Quick Actions
         </Text>
         <View className=" flex flex-row justify-between">
-        <View className="h-full w-[48%] bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
+        <View className="h-full w-[48%] relative bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
             <TouchableOpacity
               onPress={() => router.push("/(routes)/schedules")}
-              className="absolute right-3 top-3 w-[35px] h-[35px] bg-primary rounded-full flex items-center justify-around"
+              className="absolute right-0 top-0 w-[80px] h-[80px] bg-primary rounded-tr-xl rounded-bl-[100px]  flex items-center justify-center"
             >
               <Ionicons
                 name="arrow-forward-circle-outline"
-                size={24}
+                size={28}
                 color="white"
               />
             </TouchableOpacity>
@@ -130,11 +130,11 @@ const Home = () => {
           <View className="h-full w-[48%] bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
             <TouchableOpacity
               onPress={() => router.push("/(tabs)/tickets")}
-              className="absolute right-3 top-3 w-[35px] h-[35px] bg-primary rounded-full flex items-center justify-around"
+              className="absolute right-0 top-0 w-[80px] h-[80px] bg-primary rounded-tr-xl rounded-bl-[100px]  flex items-center justify-center"
             >
               <Ionicons
                 name="arrow-forward-circle-outline"
-                size={24}
+                size={28}
                 color="white"
               />
             </TouchableOpacity>
