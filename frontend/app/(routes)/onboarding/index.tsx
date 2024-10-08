@@ -1,14 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import OnboardingScreen from '../../../screens/onboarding/onboarding.screen'
+import { View, Text } from 'react-native';
+import React from 'react';
+import OnboardingScreen from '../../../screens/onboarding/onboarding.screen';
 
-const Onboarding = () => {
-  return (
-    <View>
-        <OnboardingScreen />
-      
-    </View>
-  )
+// Define the props interface
+interface OnboardingProps {
+  onComplete: () => void; // Define the type of onComplete as a function
 }
 
-export default Onboarding
+const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
+  return (
+    <View>
+      <OnboardingScreen onComplete={onComplete} />
+    </View>
+  );
+};
+
+export default Onboarding;
