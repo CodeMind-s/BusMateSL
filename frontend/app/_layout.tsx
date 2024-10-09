@@ -16,9 +16,9 @@ SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(true); // Control splash screen visibility
-  const [onboardingComplete, setOnboardingComplete] = useState(false); // Track onboarding completion
-  const [isDriver, setIsDriver] = useState(false); // Track onboarding completion
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
+
 
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
@@ -66,21 +66,11 @@ const RootLayout = () => {
     return <Onboarding onComplete={handleOnboardingComplete} />;
   }
 
-  if (isDriver == true){
-    return (
-      <Stack screenOptions={{headerShown: false}}>
-        <Stack.Screen name="(drivertabs)" options={{ headerShown: false }} />
-      </Stack>
-    );
-
-  }
-  else{
     return (
       <Stack screenOptions={{headerShown: false}}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="(routes)" options={{ headerShown: false }} /> */}
 
-        {/* <Stack.Screen 
+        <Stack.Screen 
           name="(routes)/schedules/index" 
           options={{
             header: () => <CustomHeader onBack={() => router.back()} title="Bus Schedules" />,
@@ -110,17 +100,11 @@ const RootLayout = () => {
             header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedules"/>,
           }} 
         />
-        <Stack.Screen 
-          name="(routes)/user_selection/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="user_selection"/>,
-          }} 
-        /> */}
         <Stack.Screen name="+not-found" />
       </Stack>
     );
 
-  }
+  // }
 
   
 };

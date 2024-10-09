@@ -33,11 +33,11 @@ const Home = () => {
           className="rounded-full mr-3"
         />
         <View>
-      <Text className=" text-[21px] " style={{ fontWeight: "900" }}>
+      <Text className=" text-[16px] " style={{ fontWeight: "900" }}>
         {greeting}
       </Text>
       <Text
-        className=" text-[26px] font-extrabold text-primary "
+        className=" text-[20px] font-extrabold text-primary "
         style={{ fontWeight: "900" }}
       >
         {name}!
@@ -90,7 +90,7 @@ const Home = () => {
         </View>
       </View>
       <View className="h-[35%]">
-        <Text className=" text-[21px] my-3" style={{ fontWeight: "900" }}>
+        <Text className=" text-[20px] my-3 font-semibold"  >
           Live Bus Tracking
         </Text>
         <TouchableOpacity
@@ -107,7 +107,7 @@ const Home = () => {
         </TouchableOpacity>
       </View>
       <View className="h-[25%] my-5">
-        <Text className=" text-[21px] mb-2" style={{ fontWeight: "900" }}>
+        <Text className=" text-[20px] font-semibold mb-2">
           Quick Actions
         </Text>
         <View className=" flex flex-row justify-between">
