@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import tailwind from "tailwind-react-native-classnames";
+import { router } from "expo-router";
 
 const AnnouncementScreen = () => {
   return (
@@ -54,7 +55,7 @@ const AnnouncementScreen = () => {
       {/* Floating Action Button */}
       <TouchableOpacity
         style={tailwind`absolute bottom-8 right-8 bg-blue-500 w-14 h-14 rounded-full flex items-center justify-center shadow-lg`}
-        onPress={() => { /* Add new announcement functionality */ }}
+        onPress={() => router.push("/(routes)/addAnnouncement")}
       >
         <Ionicons name="add" size={24} color="white" />
       </TouchableOpacity>
