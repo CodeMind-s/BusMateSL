@@ -67,7 +67,7 @@ const RootLayout = () => {
   }
 
     return (
-      <Stack screenOptions={{headerShown: false}}>
+      <Stack screenOptions={{headerShown: true}}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
         <Stack.Screen 
@@ -98,6 +98,30 @@ const RootLayout = () => {
           name="(routes)/sltb_schedules/index" 
           options={{
             header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedules"/>,
+          }} 
+        />
+        <Stack.Screen 
+          name="(routes)/highway_schedules_details/index" 
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedule Details"/>,
+          }} 
+        />
+        <Stack.Screen 
+          name="(routes)/sltb_schedules_details/index" 
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedule Details"/>,
+          }} 
+        />
+        <Stack.Screen 
+          name="(routes)/intercity_schedules_details/index" 
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedule Details"/>,
+          }} 
+        />
+        <Stack.Screen 
+          name="(routes)/privatebus_schedules_details/index" 
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedule Details"/>,
           }} 
         />
         <Stack.Screen name="+not-found" />
