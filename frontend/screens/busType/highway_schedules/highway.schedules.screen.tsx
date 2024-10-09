@@ -1,23 +1,16 @@
-import { View, TextInput, Button, ScrollView } from "react-native";
+import { View, TextInput, Button, ScrollView, TouchableOpacity } from "react-native";
 import SearchComponent from "../../components/searchScheduleContainerComponent/searchScheduleContainerComponent";
 import ScheduleListCardComponent from "../../components/scheduleListCardComponent/scheduleListCardComponent";
 import React, { useState } from "react";
+import { router } from "expo-router";
 
 const Highway_Schedules = () => {
   // Array to store schedules
   const [schedules, setSchedules] = useState([
-    { from: "Colombo", to: "Panadura" },
-    { from: "Kandy", to: "Jaffna" },
-    { from: "Kandy", to: "Jaffna" },
-    { from: "Galle", to: "Colombo" },
-    { from: "Anuradhapura", to: "Panadura"},
-    { from: "Kandy", to: "Jaffna" },
-    { from: "Kandy", to: "Jaffna" },
-    { from: "Galle", to: "Colombo" },
-    { from: "Colombo", to: "Panadura"},
-    { from: "Kandy", to: "Jaffna" },
-    { from: "Kandy", to: "Jaffna" },
-    { from: "Galle", to: "Colombo" },
+    { id: 1, from: "Kurunegala", to: "Panadura" },
+    { id: 2, from: "Galle", to: "Colombo" },
+    { id: 3, from: "Kandy", to: "Jaffna" },
+    { id: 4, from: "Anuradhapura", to: "Panadura" },
   ]);
 
   // State to capture user input
@@ -26,12 +19,12 @@ const Highway_Schedules = () => {
 
   // Handle the submission of 'from' and 'to' locations
   const handleSubmit = () => {
-    // Append new schedule to the existing array
-    setSchedules((prevSchedules) => [
-      ...prevSchedules,
-      { from: fromInput, to: toInput },
-    ]);
-
+    const newSchedule = {
+      id: schedules.length + 1, // Generate a new id (ensure this is unique)
+      from: fromInput,
+      to: toInput,
+    };
+    setSchedules((prevSchedules) => [...prevSchedules, newSchedule]);
     setFromInput("");
     setToInput("");
   };
@@ -52,12 +45,14 @@ const Highway_Schedules = () => {
         onSubmit={handleSubmit}
       />
       <ScrollView>
-        {filteredSchedules.map((schedule, index) => (
-          <ScheduleListCardComponent
-            key={index}
-            from={schedule.from}
-            to={schedule.to}
-          />
+        {filteredSchedules.map((schedule) => (
+          <TouchableOpacity key={schedule.id}  
+          onPress={() => router.push(`/highway_schedules_details?id=${schedule.id}`)}>
+            <ScheduleListCardComponent
+              from={schedule.from}
+              to={schedule.to}
+            />
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>
