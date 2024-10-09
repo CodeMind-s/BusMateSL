@@ -1,118 +1,61 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import tailwind from "tailwind-react-native-classnames";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const notificationsData = [
-  {
-    id: "1",
-    type: "unread",
-    busNumber: "BEL2247-Kaduwela-Galle",
-    description: "Delayed 1h due to service",
-    time: "1 min ago",
-    tickets: 2,
-  },
-  {
-    id: "2",
-    type: "unread",
-    busNumber: "BBC1218-Kaduwela-Mathara",
-    description: "Cancelled 11.00 a.m trip",
-    time: "38 min ago",
-    tickets: 1,
-  },
-  {
-    id: "3",
-    type: "read",
-    busNumber: "ABC0011-Kaduwela-Kiribathgoda",
-    description: "Accidented",
-    time: "Yesterday",
-    tickets: 3,
-  },
-  {
-    id: "4",
-    type: "read",
-    busNumber: "BEL2247-Kaduwela-Galle",
-    description: "Delayed 1h due to service",
-    time: "1 min ago",
-    tickets: 2,
-  },
+  { id: '1', route: 'BEL2247-Kaduwela-Galle', message: 'Delayed 1h due to service', time: '1 min ago', read: false },
+  { id: '2', route: 'BBC1218-Kaduwela-Mathara', message: 'Cancelled 11.00 a.m trip', time: '38 min ago', read: false },
+  { id: '3', route: 'ABC0011-Kaduwela-Kiribathgoda', message: 'Accidented', time: 'Yesterday', read: true },
+  { id: '4', route: 'BEL2247-Kaduwela-Galle', message: 'Delayed 1h due to service', time: '1 min ago', read: true },
 ];
 
 const NotificationScreen = () => {
-  const navigation = useNavigation();
-  const [filter, setFilter] = useState("unread"); // 'read' or 'unread'
+  const [showRead, setShowRead] = useState(false);
 
-  const filteredNotifications = notificationsData.filter(
-    (notification) => notification.type === filter
+  const toggleReadUnread = () => {
+    setShowRead(!showRead);
+  };
+
+  const deleteAllNotifications = () => {
+    // Implement delete all notifications functionality here
+  };
+
+  const renderNotificationItem = ({ item }: { item: { id: string; route: string; message: string; time: string; read: boolean } }) => (
+    <TouchableOpacity style={{ flexDirection: 'row', padding: 16, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' }}>
+      <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
+        <Ionicons name="bus" size={24} color="#007bff" />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.route}</Text>
+        <Text>{item.message}</Text>
+        <Text style={{ color: '#888' }}>{item.time}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={24} color="#888" />
+    </TouchableOpacity>
   );
 
   return (
-    <View style={tailwind`flex-1 bg-gray-100`}>
-      {/* Read/Unread Filter */}
-      <View style={tailwind`flex-row justify-around bg-gray-200 py-3`}>
-        <TouchableOpacity onPress={() => setFilter("read")}>
-          <Text
-            style={tailwind`text-base ${
-              filter === "read" ? "text-blue-600" : "text-black"
-            }`}
-          >
-            Read
-          </Text>
+    <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 20 }}>
+      {/* Read/Unread Toggle */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 }}>
+        <TouchableOpacity onPress={() => setShowRead(false)}>
+          <Text style={{ color: !showRead ? '#000' : '#888', fontWeight: !showRead ? 'bold' : 'normal' }}>Unread</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setFilter("unread")}>
-          <Text
-            style={tailwind`text-base ${
-              filter === "unread" ? "text-black" : "text-gray-500"
-            }`}
-          >
-            Unread
-          </Text>
+        <TouchableOpacity onPress={() => setShowRead(true)}>
+          <Text style={{ color: showRead ? '#000' : '#888', fontWeight: showRead ? 'bold' : 'normal' }}>Read</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Notifications List */}
+      {/* Notification List */}
       <FlatList
-        data={filteredNotifications}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View
-            style={tailwind`flex-row justify-between items-center p-4 border-b border-gray-200`}
-          >
-            <View style={tailwind`flex-row items-center`}>
-              <Ionicons name="bus" size={24} color="blue" />
-              <View style={tailwind`ml-4`}>
-                <Text style={tailwind`text-lg font-semibold`}>
-                  {item.busNumber}
-                </Text>
-                <Text style={tailwind`text-sm text-gray-500`}>
-                  {item.description}
-                </Text>
-                <Text style={tailwind`text-xs text-gray-400`}>{item.time}</Text>
-              </View>
-            </View>
-            <TouchableOpacity>
-              <Ionicons name="chevron-forward" size={20} color="black" />
-            </TouchableOpacity>
-          </View>
-        )}
+        data={notificationsData.filter(notification => notification.read === showRead)}
+        renderItem={renderNotificationItem}
+        keyExtractor={item => item.id}
       />
 
       {/* Delete All Button */}
-      <TouchableOpacity
-        style={tailwind`mt-4 p-4 bg-red-500 rounded-lg mx-4`}
-        onPress={() => {
-          // Add delete all functionality here
-          alert("All notifications deleted");
-        }}
-      >
-        <Text style={tailwind`text-white text-center`}>Delete all</Text>
+      <TouchableOpacity onPress={deleteAllNotifications} style={{ padding: 16, alignItems: 'center' }}>
+        <Text style={{ color: '#007bff' }}>Delete all</Text>
       </TouchableOpacity>
     </View>
   );

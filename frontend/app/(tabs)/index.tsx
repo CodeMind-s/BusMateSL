@@ -1,7 +1,7 @@
-import RegisterScreen from "@/screens/register/register.screen";
+import Home from "@/screens/home";
 
 const Index = () => {
-  return <RegisterScreen />;
+  return <Home />;
 };
 
 export default Index;

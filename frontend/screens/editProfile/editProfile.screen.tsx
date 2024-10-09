@@ -53,10 +53,8 @@ const EditProfile = () => {
   };
 
   return (
+    <View style={tailwind`flex-1 bg-gray-100`}>
     <ScrollView className="flex-1 bg-gray-100 p-6">
-      <View className=" justify-center items-center ">
-        <Text>Highway_Schedules</Text>
-      </View>
       <View className="flex items-center mb-8">
         <TouchableOpacity onPress={pickImage} className="relative">
           <Image
@@ -137,6 +135,7 @@ const EditProfile = () => {
         <Text className="text-white text-center text-lg">Save changes</Text>
       </TouchableOpacity>
     </ScrollView>
+    </View>
   );
 };
 
