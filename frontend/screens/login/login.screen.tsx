@@ -10,6 +10,7 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 // import { TailwindProvider } from "tailwindcss-react-native";
 import CheckBox from "expo-checkbox";
+import { router } from "expo-router";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -18,14 +19,14 @@ const LoginScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
-    <SafeAreaView className="flex-1 px-6 bg-gray-100">
+    <View className="p-6">
       <View className="items-center py-6">
         <Text className="text-xl font-bold">Login</Text>
       </View>
 
       <View className="items-center my-6">
         <Image
-          source={require("../../assets/images/1.png")} // Replace with your logo path
+          source={require("../../assets/images/logo.png")} // Replace with your logo path
           className="w-32 h-16"
           resizeMode="contain"
         />
@@ -37,13 +38,14 @@ const LoginScreen = () => {
             Login
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push("/(routes)/register")}
+        >
           <Text className="mx-4 text-lg text-gray-500">Register</Text>
         </TouchableOpacity>
       </View>
 
       <View className="flex-row items-center border-b border-gray-300 mb-4 py-2">
-        <Ionicons name="mail-outline" size={20} color="gray" />
+        <Ionicons name="mail-outline" size={24} color="black" />
         <TextInput
           className="flex-1 ml-3 text-lg"
           placeholder="Email Address"
@@ -54,7 +56,7 @@ const LoginScreen = () => {
       </View>
 
       <View className="flex-row items-center border-b border-gray-300 mb-4 py-2">
-        <Ionicons name="lock-closed-outline" size={20} color="gray" />
+        <Ionicons name="lock-closed-outline" size={24} color="black" />
         <TextInput
           className="flex-1 ml-3 text-lg"
           placeholder="Password"
@@ -80,17 +82,20 @@ const LoginScreen = () => {
           />
           <Text className="text-gray-600">Remember password</Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push("/(routes)/forgotPassword")}
+        >
           <Text className="text-blue-500">Forget password</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity className="bg-blue-500 py-3 rounded-lg">
+      <TouchableOpacity className="bg-blue-500 py-3 rounded-lg" onPress={() => {
+            // Add functionality to save changes
+          }}>
         <Text className="text-white text-center font-semibold text-lg">
           Login
         </Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 
