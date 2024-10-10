@@ -49,7 +49,7 @@ const AddAnnouncementScreen = () => {
         {/* Message Input */}
         <Text style={tailwind`font-bold text-gray-700 mb-1`}>Message</Text>
         <TextInput
-          style={tailwind`border p-2 rounded-lg border-gray-300 mb-4 h-32 text-top`}
+          style={tailwind`border p-2 rounded-lg border-gray-300 mb-4 h-32`}
           placeholder="Description"
           value={message}
           onChangeText={setMessage}
@@ -58,7 +58,8 @@ const AddAnnouncementScreen = () => {
 
         {/* Publish Button */}
         <TouchableOpacity
-          style={tailwind`bg-blue-500 p-4 rounded-lg mt-4`}
+            style={{backgroundColor: '#007BFF',padding: 15,borderRadius: 8,alignItems: 'center',marginTop: 40,alignSelf: 'flex-end',width: '50%', // Set the width to 50% or any appropriate width
+          }}
           onPress={() => {
             // Handle publish action here
           }}

@@ -36,7 +36,7 @@ const ProfileScreen = () => {
         <View style={tailwind`mt-8`}>
           
           <TouchableOpacity
-          onPress={() => router.push("/(routes)/highway_schedules")}
+          onPress={() => router.push("/(routes)/login")}
             style={tailwind`flex-row items-center justify-between p-4 bg-white rounded-lg mb-2`}
           >
             <View style={tailwind`flex-row items-center`}>
