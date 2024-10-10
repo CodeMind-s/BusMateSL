@@ -18,7 +18,7 @@ const createBooking = asyncHandler(async (req, res) => {
   // console.log(`busExists => `, busExists);
 
   // Check if the seat is already booked
-  const existingBooking = await Booking.findOne({ seatNumber });
+  const existingBooking = await Booking.findOne({ seatNumber, bookedDate });
   console.log(`existingBooking => `, existingBooking);
   if (existingBooking) {
     res.status(400).json({ message: "Seat already booked" });
@@ -57,10 +57,9 @@ const getAllBookings = asyncHandler(async (req, res) => {
 // @desc    Get all bookings for a user
 // @route   GET /api/bookings/user/:userId
 const getBookingsByUser = asyncHandler(async (req, res) => {
-  // console.log(req.user);
-  const bookings = await Booking.find({ user: req.user._id }).populate(
+  const bookings = await Booking.find(req.params.userId).populate(
     "schedule",
-    "endLocation startLocation bus",
+    "bus startLocation startTime endLocation endTime"
   );
 
   if (bookings.length > 0) {
@@ -88,10 +87,9 @@ const getBookingsByBus = asyncHandler(async (req, res) => {
 // @desc    Get a single booking by ID
 // @route   GET /api/bookings/:id
 const getBookingById = asyncHandler(async (req, res) => {
-  const booking = await Booking.findById(req.params.id).populate(
-    "schedule",
-    "bus startLocation startTime endLocation endTime"
-  );
+  const booking = await Booking.findById(req.params.id)
+    .populate("schedule", "bus startLocation startTime endLocation endTime")
+    .populate("user", "name email");
 
   if (booking) {
     res.status(200).json(booking);

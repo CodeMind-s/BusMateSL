@@ -18,10 +18,7 @@ import {
 
 const router = express.Router();
 
-router
-  .route("/")
-  .post(createBus)
-  .get(authenticate, authorizeAdmin, getAllBuses);
+router.route("/").post(createBus).get(getAllBuses);
 
 router.post("/auth", authBus);
 router.post("/logout", logoutCurrentBus);

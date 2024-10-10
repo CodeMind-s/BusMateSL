@@ -1,4 +1,5 @@
 import Schedule from "../models/scheduleModel.js";
+import Booking from "../models/bookingModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 
 // @desc    Create a new schedule
@@ -95,7 +96,10 @@ const getSchedulesByLocation = asyncHandler(async (req, res) => {
   const schedules = await Schedule.find({
     startLocation: startLocation,
     endLocation: endLocation,
-  }).populate("bus", "busNumber from to");
+  }).populate({
+    path: "bus",
+    select: "busNumber from to amenities",
+  });
 
   if (schedules.length > 0) {
     res.status(200).json(schedules);
@@ -106,6 +110,39 @@ const getSchedulesByLocation = asyncHandler(async (req, res) => {
   }
 });
 
+const getScheduleSeatsById = asyncHandler(async (req, res) => {
+  const { id, date } = req.params;
+  const seats = await getAllSeats(30, id, date);
+  if (seats) {
+    res.status(200).json(seats);
+  } else {
+    res.status(404).json({ message: "Schedule not found" });
+  }
+});
+
+async function getAllSeats(totalSeats = 30, scheduleId, date) {
+  const bookedSeats = await Booking.find({
+    schedule: scheduleId,
+    bookedDate: {
+      $gte: new Date(date),
+      $lt: new Date(date).setDate(new Date(date).getDate() + 1),
+    },
+  });
+  const seats = [];
+  for (let i = 1; i <= totalSeats; i++) {
+    const seatNumber = `${i}A`;
+    const booking = bookedSeats.find(
+      (booking) => booking.seatNumber === seatNumber
+    );
+    seats.push({
+      seatNumber: seatNumber,
+      isBooked: !!booking,
+      gender: booking ? booking.gender : null,
+    });
+  }
+  return seats;
+}
+
 export {
   createSchedule,
   getAllSchedulesByBus,
@@ -113,4 +150,5 @@ export {
   updateSchedule,
   deleteSchedule,
   getSchedulesByLocation,
+  getScheduleSeatsById,
 };

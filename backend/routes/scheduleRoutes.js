@@ -6,6 +6,7 @@ import {
   updateSchedule,
   deleteSchedule,
   getSchedulesByLocation,
+  getScheduleSeatsById,
 } from "../controllers/scheduleController.js";
 import { authenticateBus } from "../middlewares/authMiddleware.js";
 
@@ -22,5 +23,7 @@ router
   .delete(deleteSchedule);
 
 router.route("/location").post(getSchedulesByLocation);
+
+router.route("/seats/:id/:date").get(getScheduleSeatsById);
 
 export default router;

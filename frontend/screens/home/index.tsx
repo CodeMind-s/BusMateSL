@@ -27,22 +27,22 @@ const Home = () => {
   return (
     <View className=" bg-swhite h-full w-full flex-1 px-6 py-4 ">
       <View className="flex flex-row">
-       <Image 
-          source={{ uri: 'https://as1.ftcdn.net/v2/jpg/03/28/19/46/1000_F_328194664_RKSHvMLgHphnD1nwQYb4QKcNeEApJmqa.jpg' }} 
-          style={{ width: 50, height: 50 }} 
+        <Image
+          source={{ uri: 'https://as1.ftcdn.net/v2/jpg/03/28/19/46/1000_F_328194664_RKSHvMLgHphnD1nwQYb4QKcNeEApJmqa.jpg' }}
+          style={{ width: 50, height: 50 }}
           className="rounded-full mr-3"
         />
         <View>
-      <Text className=" text-[16px] " style={{ fontWeight: "900" }}>
-        {greeting}
-      </Text>
-      <Text
-        className=" text-[20px] font-extrabold text-primary "
-        style={{ fontWeight: "900" }}
-      >
-        {name}!
-      </Text>
-      </View>
+          <Text className=" text-[16px] " style={{ fontWeight: "900" }}>
+            {greeting}
+          </Text>
+          <Text
+            className=" text-[20px] font-extrabold text-primary "
+            style={{ fontWeight: "900" }}
+          >
+            {name}!
+          </Text>
+        </View>
       </View>
       <View>
         <Text className="mt-4 text-[18px]">Recommended Buses</Text>
@@ -111,7 +111,7 @@ const Home = () => {
           Quick Actions
         </Text>
         <View className=" flex flex-row justify-between">
-        <View className="h-full w-[48%] relative bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
+          <View className="h-full w-[48%] relative bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
             <TouchableOpacity
               onPress={() => router.push("/(routes)/schedules")}
               className="absolute right-0 top-0 w-[80px] h-[80px] bg-primary rounded-tr-xl rounded-bl-[100px]  flex items-center justify-center"
@@ -129,7 +129,7 @@ const Home = () => {
           </View>
           <View className="h-full w-[48%] bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
             <TouchableOpacity
-              onPress={() => router.push("/(tabs)/tickets")}
+              onPress={() => router.push("/(routes)/tickets/ticket")}
               className="absolute right-0 top-0 w-[80px] h-[80px] bg-primary rounded-tr-xl rounded-bl-[100px]  flex items-center justify-center"
             >
               <Ionicons

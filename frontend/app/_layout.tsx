@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, Text, TouchableOpacity, Keyboard, StyleSheet} from 'react-native';
+import { View, ActivityIndicator, Text, TouchableOpacity, Keyboard, StyleSheet } from 'react-native';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import Onboarding from './(routes)/onboarding';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SearchProvider } from '@/contexts/SearchContext';
+import { TicketProvider } from '@/contexts/TicketContext';
 
 interface CustomHeaderProps {
   onBack: () => void;
@@ -66,71 +67,98 @@ const RootLayout = () => {
     return <Onboarding onComplete={handleOnboardingComplete} />;
   }
 
-    return (
-      <Stack screenOptions={{headerShown: true}}>
+  return (
+    <TicketProvider>
+      <Stack screenOptions={{ headerShown: true }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
-        <Stack.Screen 
-          name="(routes)/schedules/index" 
+        <Stack.Screen
+          name="(routes)/schedules/index"
           options={{
             header: () => <CustomHeader onBack={() => router.back()} title="Bus Schedules" />,
-          }} 
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/highway_schedules/index" 
+        <Stack.Screen
+          name="(routes)/highway_schedules/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedules"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedules" />,
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/intercity_schedules/index" 
+        <Stack.Screen
+          name="(routes)/intercity_schedules/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedules"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedules" />,
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/privatebus_schedules/index" 
+        <Stack.Screen
+          name="(routes)/privatebus_schedules/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedules"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedules" />,
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/sltb_schedules/index" 
+        <Stack.Screen
+          name="(routes)/sltb_schedules/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedules"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedules" />,
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/highway_schedules_details/index" 
+        <Stack.Screen
+          name="(routes)/highway_schedules_details/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedule Details"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedule Details" />,
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/sltb_schedules_details/index" 
+        <Stack.Screen
+          name="(routes)/sltb_schedules_details/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedule Details"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedule Details" />,
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/intercity_schedules_details/index" 
+        <Stack.Screen
+          name="(routes)/intercity_schedules_details/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedule Details"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedule Details" />,
+          }}
         />
-        <Stack.Screen 
-          name="(routes)/privatebus_schedules_details/index" 
+        <Stack.Screen
+          name="(routes)/privatebus_schedules_details/index"
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedule Details"/>,
-          }} 
+            header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedule Details" />,
+          }}
+        />
+        <Stack.Screen
+          name="(routes)/tickets/ticket/index"
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Book Ticket" />,
+          }}
+        />
+        <Stack.Screen
+          name="(routes)/tickets/bus-details/[id]"
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Bus Details" />,
+          }}
+        />
+        <Stack.Screen
+          name="(routes)/tickets/bus-seating/[id]"
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Bus Seat Selection" />,
+          }}
+        />
+        <Stack.Screen
+          name="(routes)/tickets/checkout/[id]/[seat]"
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Checkout" />,
+          }}
+        />
+        <Stack.Screen
+          name="(routes)/tickets/confirmation/[id]"
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Ticket Details" />,
+          }}
         />
         <Stack.Screen name="+not-found" />
       </Stack>
-    );
-
-  // }
-
-  
+    </TicketProvider>
+  );
 };
 
 
