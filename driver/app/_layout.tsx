@@ -67,6 +67,12 @@ const RootLayout = () => {
             header: () => <CustomHeader onBack={() => router.back()} title="Register"/>,
           }} 
         />
+        <Stack.Screen 
+          name="(routes)/editBusProfile/index" 
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Edit Bus Details"/>,
+          }} 
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
     );

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+// import CheckBox from "@react-native-community/checkbox";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const RegisterScreen = () => {
@@ -21,16 +21,8 @@ const RegisterScreen = () => {
   const [rememberPassword, setRememberPassword] = useState(false);
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#F9FAFB', padding: 20 }}>
-      {/* Header */}
-      <View style={{ backgroundColor: '#1F2937', paddingVertical: 15 }}>
-        <Text style={{ textAlign: 'center', color: '#FFF', fontSize: 18 }}>
-          Welcome
-        </Text>
-      </View>
-
-      {/* Login/Register Toggle */}
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 20 }}>
+    <View className=" px-4" >
+      <View className=" flex flex-row justify-center">
         <TouchableOpacity>
           <Text style={{ color: '#9CA3AF', fontSize: 16, marginHorizontal: 10 }}>
             Login
@@ -143,10 +135,10 @@ const RegisterScreen = () => {
 
         {/* Remember Password Checkbox */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 30 }}>
-          <CheckBox
+          {/* <CheckBox
             value={rememberPassword}
             onValueChange={setRememberPassword}
-          />
+          /> */}
           <Text style={{ marginLeft: 10, color: '#374151' }}>Remember password</Text>
         </View>
 
@@ -166,7 +158,7 @@ const RegisterScreen = () => {
           <Text style={{ color: '#FFF', fontSize: 16 }}>Next</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

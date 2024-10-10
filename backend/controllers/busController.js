@@ -28,6 +28,9 @@ const createBus = asyncHandler(async (req, res) => {
     driverNumber,
     conductorNumber,
     busNumber,
+    busName,
+    routeNumber,
+    estimatedTime,
     type,
     from,
     to,
@@ -52,6 +55,9 @@ const createBus = asyncHandler(async (req, res) => {
     driverNumber,
     conductorNumber,
     busNumber,
+    busName,
+    routeNumber,
+    estimatedTime,
     type,
     from,
     to,
@@ -102,7 +108,7 @@ const getCurrentBus = asyncHandler(async (req, res) => {
 // @desc    Update bus details
 // @route   PUT /api/buses/:id
 const updateBusById = asyncHandler(async (req, res) => {
-  const { type, from, to, phoneNumber, seatCount, password, amenities } =
+  const { type, from, to, phoneNumber, seatCount, password, amenities, busName, routeNumber, estimatedTime} =
     req.body;
 
   const bus = await Bus.findById(req.bus.id);
@@ -112,6 +118,9 @@ const updateBusById = asyncHandler(async (req, res) => {
     bus.type = type || bus.type;
     bus.from = from || bus.from;
     bus.to = to || bus.to;
+    bus.busName = busName || bus.busName;
+    bus.routeNumber = routeNumber || bus.routeNumber;
+    bus.estimatedTime = estimatedTime || bus.estimatedTime;
     bus.phoneNumber = phoneNumber || bus.phoneNumber;
     bus.seatCount = seatCount || bus.seatCount;
     bus.password = password || bus.password;
