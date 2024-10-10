@@ -13,6 +13,9 @@ const RegisterScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [seatCount, setSeatCount] = useState('');
   const [password, setPassword] = useState('');
+  const [busName, setBusName] = useState('bus123');
+  const [routeNumber, setRouteNumber] = useState('1');
+  const [estimatedTime, setEstimatedTime] = useState('00');
   const [amenities, setAmenities] = useState([]);
 
   // const handleRegister = () => {
@@ -48,6 +51,9 @@ const RegisterScreen = () => {
         from: fromLocation,
         to: toLocation,
         email,
+        busName,
+        routeNumber ,
+        estimatedTime,
         phoneNumber,
         seatCount,
         password,
