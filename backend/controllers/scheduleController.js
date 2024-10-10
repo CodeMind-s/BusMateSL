@@ -21,6 +21,21 @@ const createSchedule = asyncHandler(async (req, res) => {
   res.status(201).json(createdSchedule);
 });
 
+// @desc    Get all schedules
+// @route   GET /api/schedules
+const getAllSchedules = asyncHandler(async (req, res) => {
+  const schedules = await Schedule.find().populate({
+    path: "bus",
+    select: "busNumber from to amenities",
+  });
+
+  if (schedules.length > 0) {
+    res.status(200).json(schedules);
+  } else {
+    res.status(404).json({ message: "No schedules found" });
+  }
+});
+
 // @desc    Get all schedules for a specific bus
 // @route   GET /api/schedules/bus/:busId
 const getAllSchedulesByBus = asyncHandler(async (req, res) => {
@@ -145,6 +160,7 @@ async function getAllSeats(totalSeats = 30, scheduleId, date) {
 
 export {
   createSchedule,
+  getAllSchedules,
   getAllSchedulesByBus,
   getScheduleById,
   updateSchedule,
