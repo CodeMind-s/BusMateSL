@@ -4,7 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import Ionicons from "@expo/vector-icons/Ionicons";

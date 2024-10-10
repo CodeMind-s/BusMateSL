@@ -47,7 +47,7 @@ const OnboardingScreen = ({ onComplete }) => { // Changed from setShowOnboarding
         <View className='w-full mb-7 flex items-center justify-end flex-row'>
           <TouchableOpacity onPress={handleNext}>
             {splashScreens[currentScreen].id !== 3 ? (
-              <Text className='text-[#A1A1A1] text-[18px] font-bold text-right pr-4 pt-3'>Skip</Text>
+              <Text className='text-[#A1A1A1] text-[16px] font-bold text-right pr-4 pt-3'>Skip</Text>
             ) : (
               <Text></Text>
             )}

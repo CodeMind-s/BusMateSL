@@ -33,7 +33,7 @@ const DriverDashboardScreen = () => {
             </View>
       </View>
 
-      <TouchableOpacity className=' w-full py-5 bg-primary rounded-xl mt-6'>
+      <TouchableOpacity onPress={() => router.push("/(tabs)/track-bus")} className=' w-full py-5 bg-primary rounded-xl mt-6'>
         <Text className=' text-center text-[20px] font-semibold text-white'>Switch On Location</Text>
       </TouchableOpacity>
 
@@ -51,7 +51,7 @@ const DriverDashboardScreen = () => {
       </View>
 
       <Text className=' mt-4 font-semibold text-lg'>Next Journey</Text>
-      <TouchableOpacity onPress={() => router.push("/(tabs)/schedule")}>
+      <TouchableOpacity onPress={() => router.push('/(tabs)/schedule')}>
         <ScheduleListCardComponent from='Kaduwela' to='Kollupitiya'/>
       </TouchableOpacity>
 
@@ -59,7 +59,7 @@ const DriverDashboardScreen = () => {
         <Text className=' text-[#5e5e5e] text-base'>Monthly Earning so far, </Text>
         <Text className=' text-2xl font-bold text-primary mt-1'>Rs. 15,000.00 </Text>
         <View className=' flex flex-row justify-end mt-4'>
-            <TouchableOpacity onPress={() => router.push("/(routes)/earning")} className=' bg-primary rounded-lg py-2 px-5 w-[50%]'><Text className=' text-center text-white text-lg font-semibold'>View More</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/(routes)/earning')} className=' bg-primary rounded-lg py-2 px-5 w-[50%]'><Text className=' text-center text-white text-lg font-semibold'>View More</Text></TouchableOpacity>
         </View>
       </View>
     

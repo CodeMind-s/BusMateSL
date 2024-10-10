@@ -53,9 +53,9 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <View className="h-full bg-swhite px-6 py-4">
+    <View className="h-[120vh] bg-swhite -mt-9 py-4">
       {/* Dark Background Header */}
-      <View className="h-[25%] items-center justify-center bg-gray-900 rounded-b-2xl mb-4">
+      <View className=" py-6 items-center justify-center bg-Secondary rounded-b-2xl mb-4">
       <TouchableOpacity onPress={pickImage} className="relative">
           <Image
             source={{ uri: profileImage }}
@@ -65,42 +65,41 @@ const EditProfileScreen = () => {
             <Ionicons name="camera" size={20} color="#000" />
           </View>
         </TouchableOpacity>
-        <Text className="text-xl font-bold text-white mt-2">Edit Profile</Text>
       </View>
 
       {/* Form Fields */}
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1 px-3 h-full">
       <View className="mb-4">
-        <Text className="mb-2 text-lg font-bold">Name</Text>
+        <Text className="mb-1 text-base font-semibold">Name</Text>
         <TextInput
           value={name}
           onChangeText={setName}
-          className="border border-gray-300 p-3 rounded-lg bg-white"
+          className="border border-gray-300 px-3 py-2 rounded-lg bg-white"
         />
       </View>
 
       <View className="mb-4">
-        <Text className="mb-2 text-lg font-bold">Email</Text>
+        <Text className="mb-1 text-base font-semibold">Email</Text>
         <TextInput
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
-          className="border border-gray-300 p-3 rounded-lg bg-white"
+          className="border border-gray-300 px-3 py-2 rounded-lg bg-white"
         />
       </View>
 
       <View className="mb-4">
-        <Text className="mb-2 text-lg font-bold">Password</Text>
+        <Text className="mb-1 text-base font-semibold">Password</Text>
         <TextInput
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          className="border border-gray-300 p-3 rounded-lg bg-white"
+          className="border border-gray-300 px-3 py-2 rounded-lg bg-white"
         />
       </View>
 
       <View className="mb-4">
-        <Text className="mb-2 text-lg font-bold">Date of Birth</Text>
+        <Text className="mb-1 text-base font-semibold">Date of Birth</Text>
         <TouchableOpacity
           onPress={() => setShowDatePicker(true)}
           className="border border-gray-300 p-3 rounded-lg bg-white"
@@ -117,13 +116,13 @@ const EditProfileScreen = () => {
         )}
       </View>
 
-      <View className="mb-6">
-        <Text className="mb-2 text-lg font-bold">Gender</Text>
+      <View className="mb-3">
+        <Text className="mb-1 text-base font-semibold">Gender</Text>
         <View className="border border-gray-300 rounded-lg bg-white">
           <TextInput
             value={gender}
             editable={false}
-            className="h-12 p-3 text-lg"
+            className="border border-gray-300 px-3 py-2 rounded-lg bg-white"
           />
         </View>
       </View>

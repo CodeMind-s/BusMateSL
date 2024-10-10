@@ -67,96 +67,124 @@ const RootLayout = () => {
     return <Onboarding onComplete={handleOnboardingComplete} />;
   }
 
-  return (
-    <TicketProvider>
-      <Stack screenOptions={{ headerShown: true }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(routes)/schedules/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Bus Schedules" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/highway_schedules/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedules" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/intercity_schedules/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedules" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/privatebus_schedules/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedules" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/sltb_schedules/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedules" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/highway_schedules_details/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedule Details" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/sltb_schedules_details/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedule Details" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/intercity_schedules_details/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedule Details" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/privatebus_schedules_details/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedule Details" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/tickets/ticket/index"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Book Ticket" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/tickets/bus-details/[id]"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Bus Details" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/tickets/bus-seating/[id]"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Bus Seat Selection" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/tickets/checkout/[id]/[seat]"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Checkout" />,
-          }}
-        />
-        <Stack.Screen
-          name="(routes)/tickets/confirmation/[id]"
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Ticket Details" />,
-          }}
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+    return (
+      <TicketProvider>
+        <Stack screenOptions={{headerShown: true}}>
+          <Stack.Screen 
+            name="(tabs)" 
+            options={{ headerShown: false }} 
+          />
+
+          <Stack.Screen 
+            name="(routes)/schedules/index" 
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Bus Schedules" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/highway_schedules/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedules" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/intercity_schedules/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedules" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/privatebus_schedules/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedules" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/sltb_schedules/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedules" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/highway_schedules_details/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Highway Schedule Details" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/sltb_schedules_details/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="SLTB Schedule Details" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/intercity_schedules_details/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Intercity Schedule Details" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/privatebus_schedules_details/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Private Bus Schedule Details" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/tickets/ticket/index"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Book Ticket" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/tickets/bus-details/[id]"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Bus Details" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/tickets/bus-seating/[id]"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Bus Seat Selection" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/tickets/checkout/[id]/[seat]"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Checkout" />,
+            }}
+          />
+          <Stack.Screen
+            name="(routes)/tickets/confirmation/[id]"
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Ticket Details" />,
+            }}
+          />
+          <Stack.Screen 
+            name="(routes)/editProfile/index" 
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Edit Prifile"/>,
+            }} 
+          />
+          <Stack.Screen 
+            name="(routes)/forgotPassword/index" 
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Forgot Password"/>,
+            }} 
+          />
+          <Stack.Screen 
+            name="(routes)/login/index" 
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Login"/>,
+            }} 
+          />
+          <Stack.Screen 
+            name="(routes)/register/index" 
+            options={{
+              header: () => <CustomHeader onBack={() => router.back()} title="Register"/>,
+            }} 
+          />
+          <Stack.Screen name="+not-found" />
+        </Stack>
     </TicketProvider>
   );
 };

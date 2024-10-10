@@ -11,70 +11,68 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={tailwind`flex-1 bg-gray-100`}>
-      <ScrollView contentContainerStyle={tailwind`p-6`}>
+    <View className='flex-1 bg-swhite'>
+      <ScrollView className="  -mt-5">
         {/* Profile Image and Edit Icon */}
-        <View style={tailwind`items-center mb-6`}>
-          <View style={tailwind`relative`}>
+        <View className='items-center py-6 mb-6 bg-Secondary rounded-b-[20px] '>
+          <View className='relative'>
             <Image
               source={{ uri: "https://randomuser.me/api/portraits/women/44.jpg" }}
-              style={tailwind`w-28 h-28 rounded-full border-4 border-white`}
+              className='w-28 h-28 rounded-full border-4 border-white'
             />
             <TouchableOpacity
-              style={tailwind`absolute bottom-0 right-0 bg-white p-1 rounded-full`}
+              className='absolute bottom-0 right-0 bg-white p-1 rounded-full'
               onPress={() => router.push("/(routes)/editProfile")}
             >
               <Ionicons name="pencil-outline" size={20} color="black" />
             </TouchableOpacity>
           </View>
-          <Text style={tailwind`text-lg font-bold text-black mt-4`}>Randini Maliksha</Text>
-          <Text style={tailwind`text-gray-500`}>randi@gmail.com</Text>
+          <Text className='text-lg font-bold text-white mt-4'>Randini Maliksha</Text>
+          <Text className='text-[#A1A1A1]'>randi@gmail.com</Text>
         </View>
 
         {/* Options */}
         
-        <View style={tailwind`mt-8`}>
+        <View className=' px-2'>
           
           <TouchableOpacity
-          onPress={() => router.push("/(routes)/login")}
-            style={tailwind`flex-row items-center justify-between p-4 bg-white rounded-lg mb-2`}
+            className='flex-row items-center justify-between p-4 bg-swhite border-[#A1A1A1]/50 border-b-2 rounded-lg'
           >
-            <View style={tailwind`flex-row items-center`}>
+            <View className='flex-row items-center'>
               <Ionicons name="location-outline" size={24} color="black" />
-              <Text style={tailwind`ml-4 font-bold text-lg text-base`}>My Locations</Text>
+              <Text className='ml-4 font-bold text-base'>My Locations</Text>
             </View>
             <Ionicons name="chevron-forward" size={24} color="black" />
           </TouchableOpacity>
 
           <TouchableOpacity
-          onPress={() => router.push("/(routes)/highway_schedules")}
-            style={tailwind`flex-row items-center justify-between p-4 bg-white rounded-lg mb-2`}
+            className='flex-row items-center justify-between p-4 bg-swhite rounded-lg border-[#A1A1A1]/50 border-b-2'
           >
-            <View style={tailwind`flex-row items-center`}>
+            <View className='flex-row items-center'>
               <Ionicons name="calendar-outline" size={24} color="black" />
-              <Text style={tailwind`ml-4 font-bold text-lg text-base`}>Booking History</Text>
+              <Text className='ml-4 font-bold text-base'>Booking History</Text>
             </View>
             <Ionicons name="chevron-forward" size={24} color="black" />
           </TouchableOpacity>
 
           <TouchableOpacity
-          onPress={() => router.push("/(routes)/highway_schedules")}
-            style={tailwind`flex-row items-center justify-between p-4 bg-white rounded-lg mb-2`}
+            onPress={() => router.push("/(routes)/editProfile")}
+            className='flex-row items-center justify-between p-4 bg-swhite rounded-lg border-[#A1A1A1]/50 border-b-2'
           >
-            <View style={tailwind`flex-row items-center`}>
+            <View className='flex-row items-center'>
               <Ionicons name="settings-outline" size={24} color="black" />
-              <Text style={tailwind`ml-4 font-bold text-lg text-base`}>Settings</Text>
+              <Text className='ml-4 font-bold text-base'>Settings</Text>
             </View>
             <Ionicons name="chevron-forward" size={24} color="black" />
           </TouchableOpacity>
 
           <TouchableOpacity
-          onPress={() => router.push("/(routes)/highway_schedules")}
-            style={tailwind`flex-row items-center justify-between p-4 bg-white rounded-lg mb-2`}
+            onPress={() => router.push("/(routes)/login")}
+            className='flex-row items-center justify-between p-4 bg-swhite rounded-lg border-[#A1A1A1]/50 border-b-2'
           >
-            <View style={tailwind`flex-row items-center`}>
+            <View className='flex-row items-center'>
               <Ionicons name="exit-outline" size={24} color="black" />
-              <Text style={tailwind`ml-4 font-bold text-lg text-base`}>Sign Out</Text>
+              <Text className='ml-4 font-bold text-base'>Sign Out</Text>
             </View>
             <Ionicons name="chevron-forward" size={24} color="black" />
           </TouchableOpacity>
