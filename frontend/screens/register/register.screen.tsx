@@ -4,10 +4,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
+  Image,
+  ScrollView, // Import ScrollView
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+import CheckBox from "expo-checkbox";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
+import { post } from "@/helpers/api";
 
 const RegisterScreen = () => {
   // State variables
@@ -20,151 +23,208 @@ const RegisterScreen = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberPassword, setRememberPassword] = useState(false);
 
+  const handleRegister = async () => {
+    // Prepare the data to be sent
+    const data = {
+      name,
+      contact: contactNumber,
+      email,
+      password,
+    };
+
+    try {
+      console.log(`data => `, data);
+      await post("users", data);
+      // const result = await response.json();
+      // console.log('Registration successful:', response);
+      // Handle successful registration (e.g., navigate to another screen)
+      alert("Registration successful!");
+      router.push("/(routes)/login");
+    } catch (error) {
+      console.error("Error registering:", error);
+      // Handle error (e.g., show an error message)
+      alert("Registration failed. Please try again.");
+    }
+  };
+
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#F9FAFB', padding: 20 }}>
-      {/* Header */}
-      <View style={{ backgroundColor: '#1F2937', paddingVertical: 15 }}>
-        <Text style={{ textAlign: 'center', color: '#FFF', fontSize: 18 }}>
-          Welcome
-        </Text>
-      </View>
-
-      {/* Login/Register Toggle */}
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 20 }}>
-        <TouchableOpacity>
-          <Text style={{ color: '#9CA3AF', fontSize: 16, marginHorizontal: 10 }}>
-            Login
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={{ color: '#3B82F6', fontSize: 16, marginHorizontal: 10, textDecorationLine: 'underline' }}>
-            Register
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Registration Form */}
+    <ScrollView // Wrap the main content in ScrollView
+      contentContainerStyle={{ flexGrow: 1 }} // Ensure content takes full height
+      keyboardShouldPersistTaps="handled" // Allows tapping outside of keyboard to dismiss it
+    >
       <View>
-        {/* Name Field */}
-        <Text style={{ fontSize: 16, color: '#374151', marginBottom: 5 }}>Your name</Text>
-        <TextInput
-          value={name}
-          onChangeText={setName}
-          placeholder="Enter your name"
-          style={{
-            borderBottomColor: '#D1D5DB',
-            borderBottomWidth: 1,
-            paddingBottom: 8,
-            marginBottom: 20
-          }}
-        />
-
-        {/* Contact Number Field */}
-        <Text style={{ fontSize: 16, color: '#374151', marginBottom: 5 }}>Contact Number</Text>
-        <TextInput
-          value={contactNumber}
-          onChangeText={setContactNumber}
-          keyboardType="phone-pad"
-          placeholder="+977"
-          style={{
-            borderBottomColor: '#D1D5DB',
-            borderBottomWidth: 1,
-            paddingBottom: 8,
-            marginBottom: 20
-          }}
-        />
-
-        {/* Email Field */}
-        <Text style={{ fontSize: 16, color: '#374151', marginBottom: 5 }}>Email Address</Text>
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          placeholder="Enter your email"
-          style={{
-            borderBottomColor: '#D1D5DB',
-            borderBottomWidth: 1,
-            paddingBottom: 8,
-            marginBottom: 20
-          }}
-        />
-
-        {/* Password Field */}
-        <Text style={{ fontSize: 16, color: '#374151', marginBottom: 5 }}>Password</Text>
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomColor: '#D1D5DB',
-          borderBottomWidth: 1,
-          paddingBottom: 8,
-          marginBottom: 20
-        }}>
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-            placeholder="Enter your password"
-            style={{ flex: 1 }}
+        <View className="items-center mt-6">
+          <Image
+            source={require("../../assets/images/logo.png")} // Replace with your logo path
+            className="w-32 h-16"
+            resizeMode="contain"
           />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons
-              name={showPassword ? "eye-off" : "eye"}
-              size={20}
-              color="gray"
-            />
-          </TouchableOpacity>
         </View>
 
-        {/* Confirm Password Field */}
-        <Text style={{ fontSize: 16, color: '#374151', marginBottom: 5 }}>Confirm Password</Text>
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomColor: '#D1D5DB',
-          borderBottomWidth: 1,
-          paddingBottom: 8,
-          marginBottom: 20
-        }}>
-          <TextInput
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry={!showConfirmPassword}
-            placeholder="Confirm your password"
-            style={{ flex: 1 }}
-          />
-          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-            <Ionicons
-              name={showConfirmPassword ? "eye-off" : "eye"}
-              size={20}
-              color="gray"
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Remember Password Checkbox */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 30 }}>
-          <CheckBox
-            value={rememberPassword}
-            onValueChange={setRememberPassword}
-          />
-          <Text style={{ marginLeft: 10, color: '#374151' }}>Remember password</Text>
-        </View>
-
-        {/* Next Button */}
-        <TouchableOpacity
+        <View
           style={{
-            backgroundColor: '#3B82F6',
-            paddingVertical: 15,
-            borderRadius: 8,
-            alignItems: 'center',
-          }}
-          onPress={() => {
-            // Handle registration process here
-            alert("Proceeding to the next step...");
+            flexDirection: "row",
+            justifyContent: "center",
+            marginVertical: 20,
+            padding: 10,
           }}
         >
-          <Text style={{ color: '#FFF', fontSize: 16 }}>Next</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/(routes)/login")}>
+            <Text
+              style={{ color: "#9CA3AF", fontSize: 16, marginHorizontal: 10 }}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text
+              style={{
+                color: "#3B82F6",
+                fontSize: 16,
+                marginHorizontal: 10,
+                textDecorationLine: "underline",
+              }}
+            >
+              Register
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View className="p-5">
+          <Text style={{ fontSize: 16, color: "#374151", marginBottom: 5 }}>
+            Your name
+          </Text>
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            placeholder="Enter your name"
+            style={{
+              borderBottomColor: "#D1D5DB",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 20,
+            }}
+          />
+
+          <Text style={{ fontSize: 16, color: "#374151", marginBottom: 5 }}>
+            Contact Number
+          </Text>
+          <TextInput
+            value={contactNumber}
+            onChangeText={setContactNumber}
+            keyboardType="phone-pad"
+            placeholder="+977"
+            style={{
+              borderBottomColor: "#D1D5DB",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 20,
+            }}
+          />
+
+          <Text style={{ fontSize: 16, color: "#374151", marginBottom: 5 }}>
+            Email Address
+          </Text>
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            placeholder="Enter your email"
+            style={{
+              borderBottomColor: "#D1D5DB",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 20,
+            }}
+          />
+
+          <Text style={{ fontSize: 16, color: "#374151", marginBottom: 5 }}>
+            Password
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              borderBottomColor: "#D1D5DB",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 20,
+            }}
+          >
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              placeholder="Enter your password"
+              style={{ flex: 1 }}
+            />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Ionicons
+                name={showPassword ? "eye-off" : "eye"}
+                size={20}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <Text style={{ fontSize: 16, color: "#374151", marginBottom: 5 }}>
+            Confirm Password
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              borderBottomColor: "#D1D5DB",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 20,
+            }}
+          >
+            <TextInput
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry={!showConfirmPassword}
+              placeholder="Confirm your password"
+              style={{ flex: 1 }}
+            />
+            <TouchableOpacity
+              onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              <Ionicons
+                name={showConfirmPassword ? "eye-off" : "eye"}
+                size={20}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 30,
+            }}
+          >
+            <CheckBox
+              value={rememberPassword}
+              onValueChange={setRememberPassword}
+            />
+            <Text style={{ marginLeft: 10, color: "#374151" }}>
+              Remember password
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#3B82F6",
+              paddingVertical: 15,
+              borderRadius: 8,
+              alignItems: "center",
+            }}
+            onPress={handleRegister} // Call the handleRegister function
+          >
+            <Text style={{ color: "#FFF", fontSize: 16 }}>Next</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );

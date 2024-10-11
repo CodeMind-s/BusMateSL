@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -12,6 +12,8 @@ import QRCode from "react-native-qrcode-svg";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { get } from "@/helpers/api";
+import { Ionicons } from "@expo/vector-icons";
+import { TicketContext } from "@/contexts/TicketContext";
 
 interface BookingProps {
   _id: string;
@@ -27,12 +29,20 @@ interface BookingProps {
     email: string;
   };
   amount: number;
+  status: string;
 }
 
 const TicketConfirmationScreen = ({ id }: { id: string | string[] }) => {
-  console.log("booking id", id);
+  // console.log("booking id", id);
+  const context = useContext(TicketContext);
+  if (!context) {
+    throw new Error(
+      "TicketContext or AuthContext must be used within a TicketProvider or AuthProvider"
+    );
+  }
+  const { date, gender } = context;
   const [bookingData, setBookingData] = useState<BookingProps>();
-
+  // console.log(`bookingData => `, bookingData);
   useEffect(() => {
     const fetchBookingData = async () => {
       const response = await get(`booking/${id}`);
@@ -45,7 +55,6 @@ const TicketConfirmationScreen = ({ id }: { id: string | string[] }) => {
   const downloadQRCode = async () => {
     // Get the QR code as a base64 image
     if (!qrCodeRef.current) return;
-
     qrCodeRef.current.toDataURL(async (dataURL: string) => {
       const base64Code = dataURL;
       const filename = FileSystem.documentDirectory + "qrcode_ticket.png";
@@ -66,18 +75,37 @@ const TicketConfirmationScreen = ({ id }: { id: string | string[] }) => {
     });
   };
   return (
-    <SafeAreaView className="flex-1 bg-gray-100 p-4">
+    <SafeAreaView className="flex bg-gray-100 p-4">
       {/* Ticket Information */}
       <View className="bg-white p-4 rounded-lg mb-6 border border-blue-200">
         {/* Profile Info */}
-        <View className="flex-row items-center mb-4">
-          <Image
-            source={{ uri: "https://randomuser.me/api/portraits/women/47.jpg" }}
-            className="w-12 h-12 rounded-full mr-4"
-          />
-          <View>
-            <Text className="font-bold text-lg">{bookingData?.user.name}</Text>
-            <Text className="text-gray-500">{bookingData?.user.email}</Text>
+        <View className="flex flex-row items-center justify-between mb-4">
+          <View className="flex-row gap-x-2 items-center">
+            <View className="w-[35px] h-[35px] bg-primary rounded-full flex items-center z-10 justify-around">
+              <Ionicons name="person" size={18} color="white" />
+            </View>
+            <View>
+              <Text className="font-bold text-lg text-primary">{bookingData?.user.name}</Text>
+              <Text className="text-gray-500">{bookingData?.user.email}</Text>
+            </View>
+          </View>
+          <View className="flex gap-y-1">
+            <View className="flex-row items-center gap-x-1">
+              <Ionicons name="calendar" size={15} color="gray" />
+              <Text className="text-gray-400 font-bold">{date}</Text>
+            </View>
+            <View className="flex-row items-center gap-x-1">
+              <View
+                className={`w-3 h-3 rounded-full ${bookingData?.status === "Pending" ? "bg-orange-400" : "bg-green-400"
+                  }`}
+              ></View>
+              <Text
+                className={`font-bold ${bookingData?.status === "Pending" ? "text-orange-400" : "text-green-400"
+                  }`}
+              >
+                {bookingData?.status}
+              </Text>
+            </View>
           </View>
         </View>
 
@@ -92,34 +120,37 @@ const TicketConfirmationScreen = ({ id }: { id: string | string[] }) => {
             </View>
             <View>
               <Text className="text-gray-400">Seat No</Text>
-              <Text className="font-bold text-blue-500">
+              <Text className="font-bold text-3xl text-primary">
                 {bookingData?.seatNumber}
               </Text>
             </View>
           </View>
 
-          <View className="flex-row justify-between mb-4">
-            <View>
-              <Text className="font-bold text-lg">
+          <View className="flex-row justify-between items-center mb-4  border-t border-gray-200 pt-3">
+            <View className="flex">
+              <Text className="text-base text-primary font-bold">
                 {bookingData?.schedule.startTime}
               </Text>
-              <Text className="text-gray-400">
+              <Text className="text-base font-normal">
                 {bookingData?.schedule.startLocation}
               </Text>
             </View>
-            <View>
-              <Text className="font-bold text-lg">
+            <View className="w-[45px] h-[45px] bg-primary rounded-full flex items-center z-10 justify-around">
+              <Ionicons name="trail-sign" size={20} color="white" />
+            </View>
+            <View className="flex">
+              <Text className="text-base text-primary font-bold">
                 {bookingData?.schedule.endTime}
               </Text>
-              <Text className="text-gray-400">
+              <Text className="text-base font-normal text-left">
                 {bookingData?.schedule.endLocation}
               </Text>
             </View>
           </View>
 
           <View className="flex-row justify-between border-t border-gray-200 pt-4">
-            <Text className="text-green-500 font-bold">Paid</Text>
-            <Text className="font-bold text-blue-500 text-lg">
+            <Text className="text-green-500 font-bold uppercase">Paid</Text>
+            <Text className="font-bold text-blue-500 text-2xl">
               LKR {bookingData?.amount}.00
             </Text>
           </View>
@@ -141,12 +172,12 @@ const TicketConfirmationScreen = ({ id }: { id: string | string[] }) => {
         onPress={downloadQRCode}
       >
         <Text className="text-white text-center font-semibold">
-          Download Ticket
+          Download Ticket QR Code
         </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push("/tickets")}>
-        <Text className="text-blue-500 text-center">Book another ticket</Text>
+        <Text className="text-gray-500 text-center">Go to my tickets</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
