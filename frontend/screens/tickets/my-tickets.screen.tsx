@@ -27,7 +27,7 @@ interface SchdeuleProps {
 
 interface BusProps {
     _id: string;
-    name: string;
+    busName: string;
     busNumber: string;
     rating: number;
     amenities: AmenitiesProps;
@@ -62,8 +62,8 @@ const MyTickets = () => {
             const response = await get(`booking/mybookings/${userId}`);
             setBookingData(response.data as BookingProps[]);
         } catch (error) {
-            // console.error(error);
-            // Alert.alert("Error", String(message) || "You have not booked any tickets yet.");
+            console.error(error);
+            Alert.alert("Error", "You have not booked any tickets yet.");
         }
     };
 
@@ -105,7 +105,7 @@ const MyTickets = () => {
                                         <Ionicons name="bus" size={18} color="white" />
                                     </View>
                                     <Text className="text-lg font-bold">
-                                        {booking?.schedule?.bus?.busNumber}
+                                        {booking?.schedule?.bus?.busName}
                                     </Text>
                                 </View>
                             </View>
@@ -116,12 +116,18 @@ const MyTickets = () => {
                                 </View>
                                 <View className="flex-row items-center gap-x-1">
                                     <View
-                                        className={`w-3 h-3 rounded-full ${booking.status === 'Pending' ? 'bg-orange-400' : 'bg-green-400'
-                                            }`}
+                                        className={`w-3 h-3 rounded-full 
+            ${booking.status === 'Pending' ? 'bg-orange-400'
+                                                : booking.status === 'Completed' ? 'bg-green-400'
+                                                    : booking.status === 'Cancelled' ? 'bg-red-500'
+                                                        : 'bg-gray-400'}`}
                                     ></View>
                                     <Text
-                                        className={`font-bold ${booking.status === 'Pending' ? 'text-orange-400' : 'text-green-400'
-                                            }`}
+                                        className={`font-bold 
+            ${booking.status === 'Pending' ? 'text-orange-400'
+                                                : booking.status === 'Completed' ? 'text-green-400'
+                                                    : booking.status === 'Cancelled' ? 'text-red-500'
+                                                        : 'text-gray-400'}`}
                                     >
                                         {booking.status}
                                     </Text>
@@ -132,9 +138,17 @@ const MyTickets = () => {
                         {/* Travel Info */}
                         <View className="border-t border-gray-200 pt-4">
                             <View className="flex-row justify-between mb-4">
-                                <View>
-                                    <Text className="text-gray-400">Ticket No</Text>
-                                    <Text className="font-bold text-blue-500">{booking._id}</Text>
+                                <View className="flex">
+                                    <View>
+                                        <Text className="text-gray-400">Ticket No</Text>
+                                        <Text className="font-bold text-blue-500">{booking._id}</Text>
+                                    </View>
+                                    <View className='flex flex-row mt-1'>
+                                        <Text className="text-gray-400">Gender: </Text>
+                                        <Text className={`font-bold text-md ${booking.gender === 'Female' ? 'text-pink-500' : 'text-blue-500'}`}>
+                                            {booking.gender}
+                                        </Text>
+                                    </View>
                                 </View>
                                 <View>
                                     <Text className="text-gray-400">Seat No</Text>
@@ -142,6 +156,7 @@ const MyTickets = () => {
                                         {booking.seatNumber}
                                     </Text>
                                 </View>
+
                             </View>
 
                             <View className="flex-row justify-between items-center mb-4 border-t border-gray-200 pt-3">
@@ -175,14 +190,16 @@ const MyTickets = () => {
                         </View>
 
                         {/* Show QR Code Button */}
-                        <TouchableOpacity
-                            className="bg-blue-500 py-3 rounded-lg my-2"
-                            onPress={() => handleShowQrCode(booking._id)} // trigger modal
-                        >
-                            <Text className="text-white text-center font-semibold">
-                                Show QR Code
-                            </Text>
-                        </TouchableOpacity>
+                        {booking.status !== 'Completed' && booking.status !== 'Cancelled' && (
+                            <TouchableOpacity
+                                className="bg-blue-500 py-3 rounded-lg my-2"
+                                onPress={() => handleShowQrCode(booking._id)} // trigger modal
+                            >
+                                <Text className="text-white text-center font-semibold">
+                                    Show QR Code
+                                </Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
                 ))
             ) : (
