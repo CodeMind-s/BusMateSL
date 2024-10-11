@@ -5,6 +5,7 @@ import { get } from '@/helpers/api';
 
 interface BusProps {
   _id: string;
+  busName: string;
   busNumber: string;
   from: string;
   to: string;
@@ -54,16 +55,23 @@ const NotificationScreen = () => {
   };
 
   const renderNotificationItem = ({ item }: { item: NotificationProps }) => (
-    <TouchableOpacity style={{ flexDirection: 'row', padding: 16, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' }}>
-      <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
-        <Ionicons name="bus" size={24} color="#007bff" />
+    <TouchableOpacity>
+      <View className="flex rounded-lg bg-gray-100 mt-5 mx-3 p-3">
+        <View className="flex flex-row gap-2 items-center mb-3">
+          <View className="w-[35px] h-[35px] bg-primary rounded-full flex items-center z-10 justify-around">
+            <Ionicons name="bus" size={18} color="white" />
+          </View>
+          <Text className="font-bold text-lg text-primary mb-1">{item.busId.busName}</Text>
+        </View>
+
+        <Text className="text-primary text-lg font-semibold">{item.title}</Text>
+        <Text className="text-gray-600 text- mb-4">{item.message}</Text>
+        <View className="flex flex-row items-center gap-2">
+          <Ionicons name="calendar" size={20} color="#888" />
+          <Text className="text-gray-400 font-semibold">{new Date(item.createdAt).toLocaleString()}</Text>
+        </View>
       </View>
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.busId.busNumber} - {item.busId.from} to {item.busId.to}</Text>
-        <Text>{item.message}</Text>
-        <Text style={{ color: '#888' }}>{new Date(item.createdAt).toLocaleString()}</Text>
-      </View>
-      {/* <Ionicons name="chevron-forward" size={24} color="#888" /> */}
+      {/*  */}
     </TouchableOpacity>
   );
 

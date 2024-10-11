@@ -66,6 +66,7 @@ const EditProfileScreen = () => {
     fetchUserData();
   }, [userId]);
 
+  console.log(`dateofbirth => `, userData);
   const onChangeDate = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
@@ -114,7 +115,8 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <View className="h-[120vh] bg-swhite">
+    <View className="h-[120vh] bg-w m-5 py-4">
+
       {/* Dark Background Header */}
       <View className="flex items-center justify-start bg-Secondary rounded-b-2xl -mt-6 py-6 mb-4">
         <TouchableOpacity onPress={pickImage} className="relative">

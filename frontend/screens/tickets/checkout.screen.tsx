@@ -28,6 +28,7 @@ interface ScheduleProps {
 
 interface BusProps {
   _id: string;
+  busName: string;
   busNumber: string;
 }
 
@@ -187,7 +188,7 @@ const CheckoutScreen = ({
                   <Ionicons name="bus" size={18} color="white" />
                 </View>
                 <Text className="text-lg font-bold">
-                  {scheduleData?.bus.busNumber}
+                  {scheduleData?.bus.busName}
                 </Text>
               </View>
               <View className="flex-row items-center gap-x-1">

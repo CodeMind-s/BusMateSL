@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, Text, TouchableOpacity, Keyboard, StyleSheet} from 'react-native';
+import { View, ActivityIndicator, Text, TouchableOpacity, Keyboard, StyleSheet } from 'react-native';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -28,60 +28,72 @@ const RootLayout = () => {
     };
   }, []);
 
-    return (
-      <Stack screenOptions={{headerShown: true}}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen 
-          name="(routes)/earning/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Earning Summary"/>,
-          }} 
-        />
-        <Stack.Screen 
-          name="(routes)/addSchedule/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Add New Schedule"/>,
-          }} 
-        />
-        <Stack.Screen 
-          name="(routes)/addAnnouncement/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Create Announcement"/>,
-          }} 
-        />
-        <Stack.Screen 
-          name="(routes)/announcement/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Announcements"/>,
-          }} 
-        />
-        <Stack.Screen 
-          name="(routes)/forgotPassword/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Forgot Password"/>,
-          }} 
-        />
-        <Stack.Screen 
-          name="(routes)/login/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => null} title="Login"/>,
-          }} 
-        />
-        <Stack.Screen 
-          name="(routes)/register/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => null} title="Register"/>,
-          }} 
-        />
-        <Stack.Screen 
-          name="(routes)/editBusProfile/index" 
-          options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Edit Bus Details"/>,
-          }} 
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    );
+  return (
+    <Stack screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(routes)/earning/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Earning Summary" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/addSchedule/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Add New Schedule" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/addAnnouncement/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Create Announcement" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/announcement/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Announcements" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/forgotPassword/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Forgot Password" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/login/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Login" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/register/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Register" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/editBusProfile/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Edit Bus Details" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/viewBooking/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Booking Details" />,
+        }}
+      />
+      <Stack.Screen
+        name="(routes)/editAnnouncement/index"
+        options={{
+          header: () => <CustomHeader onBack={() => router.back()} title="Edit Announcement" />,
+        }}
+      />
+      <Stack.Screen name="+not-found" />
+    </Stack>
+  );
 };
 
 

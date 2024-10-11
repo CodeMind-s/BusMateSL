@@ -32,7 +32,7 @@ const createBooking = asyncHandler(async (req, res) => {
     gender,
     bookedDate,
     amount: busExists.price,
-    isPaid: false, // Default to unpaid
+    isPaid: true, // Default to unpaid
     status: "Pending", // Default to Pending status
   });
 
@@ -70,7 +70,7 @@ const getBookingsByUser = asyncHandler(async (req, res) => {
         "startLocation startTime endLocation endTime price date status bus",
       populate: {
         path: "bus",
-        select: "busNumber",
+        select: "busNumber busName",
       },
     })
     .populate("user", "name email");
@@ -91,30 +91,34 @@ const getBookingsByBus = asyncHandler(async (req, res) => {
 
     if (schedules.length > 0) {
       const scheduleIds = schedules.map((schedule) => schedule._id);
-      
+
       // Find all bookings related to these schedule IDs
-      const bookings = await Booking.find({ schedule: { $in: scheduleIds } })
-        .populate("user", "name contact");
+      const bookings = await Booking.find({
+        schedule: { $in: scheduleIds },
+      }).populate("user", "name contact");
 
       // Just return the bookings array
       res.status(200).json(bookings); // Now the response is an array of bookings
     } else {
-      res.status(404).json({ message: "No schedules found for the specified bus" });
+      res
+        .status(404)
+        .json({ message: "No schedules found for the specified bus" });
     }
   } catch (error) {
     console.error("Error fetching bookings:", error);
-    res.status(500).json({ message: "An error occurred while fetching bookings", error: error.message });
+    res.status(500).json({
+      message: "An error occurred while fetching bookings",
+      error: error.message,
+    });
   }
 });
-
-
 
 // @desc    Get a single booking by ID
 // @route   GET /api/bookings/:id
 const getBookingById = asyncHandler(async (req, res) => {
   const booking = await Booking.findById(req.params.id)
     .populate("schedule", "bus startLocation startTime endLocation endTime")
-    .populate("user", "name email");
+    .populate("user", "name email contact");
 
   if (booking) {
     res.status(200).json(booking);

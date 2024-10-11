@@ -5,8 +5,15 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 // @desc    Create a new schedule
 // @route   POST /api/schedules
 const createSchedule = asyncHandler(async (req, res) => {
-  const { startLocation, startTime, endLocation, endTime, price, date, status } =
-    req.body;
+  const {
+    startLocation,
+    startTime,
+    endLocation,
+    endTime,
+    price,
+    date,
+    status,
+  } = req.body;
 
   const schedule = new Schedule({
     bus: req.bus._id,
@@ -28,7 +35,7 @@ const createSchedule = asyncHandler(async (req, res) => {
 const getAllSchedules = asyncHandler(async (req, res) => {
   const schedules = await Schedule.find().populate({
     path: "bus",
-    select: "busNumber from to amenities",
+    select: "busNumber busName from to amenities",
   });
 
   if (schedules.length > 0) {
@@ -57,25 +64,15 @@ const getAllSchedulesByBus = asyncHandler(async (req, res) => {
 // @desc    Get a schedule by ID
 // @route   GET /api/schedules/:id
 const getScheduleById = asyncHandler(async (req, res) => {
-  try {
-     console.log("reached here");
-    // Fetch the schedule by ID from the request params
-    const schedule = await Schedule.findById(req.params.id).populate({
-      path: "bus",
-      select: "busNumber routeNumber estimatedTime from to phoneNumber",
-    });
-    
-    console.log(schedule); // Log the fetched schedule for debugging
-    
-    // Check if the schedule exists
-    if (schedule) {
-      res.status(200).json(schedule);
-    } else {
-      res.status(404).json({ message: "Schedule not found" });
-    }
-  } catch (error) {
-    console.error("Error fetching schedule:", error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+  const schedule = await Schedule.findById(req.params.id).populate({
+    path: "bus",
+    select: "busNumber busName from to amenities routeNumber estimatedTime phoneNumber",
+  });
+
+  if (schedule) {
+    res.status(200).json(schedule);
+  } else {
+    res.status(404).json({ message: "Schedule not found" });
   }
 });
 
@@ -84,8 +81,15 @@ const getScheduleById = asyncHandler(async (req, res) => {
 // @desc    Update a schedule
 // @route   PUT /api/schedules/:id
 const updateSchedule = asyncHandler(async (req, res) => {
-  const { startLocation, startTime, endLocation, endTime, date, price,status } =
-    req.body;
+  const {
+    startLocation,
+    startTime,
+    endLocation,
+    endTime,
+    date,
+    price,
+    status,
+  } = req.body;
 
   const schedule = await Schedule.findById(req.params.id);
 
