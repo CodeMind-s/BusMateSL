@@ -5,8 +5,15 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 // @desc    Create a new schedule
 // @route   POST /api/schedules
 const createSchedule = asyncHandler(async (req, res) => {
-  const { startLocation, startTime, endLocation, endTime, price, date, status } =
-    req.body;
+  const {
+    startLocation,
+    startTime,
+    endLocation,
+    endTime,
+    price,
+    date,
+    status,
+  } = req.body;
 
   const schedule = new Schedule({
     bus: req.bus._id,
@@ -28,7 +35,7 @@ const createSchedule = asyncHandler(async (req, res) => {
 const getAllSchedules = asyncHandler(async (req, res) => {
   const schedules = await Schedule.find().populate({
     path: "bus",
-    select: "busNumber from to amenities",
+    select: "busNumber busName from to amenities",
   });
 
   if (schedules.length > 0) {
@@ -59,7 +66,7 @@ const getAllSchedulesByBus = asyncHandler(async (req, res) => {
 const getScheduleById = asyncHandler(async (req, res) => {
   const schedule = await Schedule.findById(req.params.id).populate({
     path: "bus",
-    select: "busNumber from to amenities",
+    select: "busNumber busName from to amenities",
   });
 
   if (schedule) {
@@ -72,8 +79,15 @@ const getScheduleById = asyncHandler(async (req, res) => {
 // @desc    Update a schedule
 // @route   PUT /api/schedules/:id
 const updateSchedule = asyncHandler(async (req, res) => {
-  const { startLocation, startTime, endLocation, endTime, date, price,status } =
-    req.body;
+  const {
+    startLocation,
+    startTime,
+    endLocation,
+    endTime,
+    date,
+    price,
+    status,
+  } = req.body;
 
   const schedule = await Schedule.findById(req.params.id);
 
