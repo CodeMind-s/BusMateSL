@@ -27,7 +27,7 @@ interface SchdeuleProps {
 
 interface BusProps {
   _id: string;
-  name: string;
+  busName: string;
   busNumber: string;
   rating: number;
   amenities: AmenitiesProps;
@@ -114,11 +114,11 @@ const BusDetailsScreen = ({ id }: { id: string | string[] }) => {
               <Ionicons name="bus" size={18} color="white" />
             </View>
             <Text className="text-lg font-bold">
-              {scheduleData?.bus.busNumber}
+              {scheduleData?.bus.busName}
             </Text>
           </View>
           <View className="flex gap-y-1">
-            <View className="flex flex-row items-center gap-x-1">
+            {/* <View className="flex flex-row items-center gap-x-1">
               <Ionicons
                 name="information-circle-outline"
                 size={18}
@@ -129,7 +129,7 @@ const BusDetailsScreen = ({ id }: { id: string | string[] }) => {
                   ? renderAmenities(scheduleData.bus.amenities)
                   : "No amenities available"}
               </Text>
-            </View>
+            </View> */}
             <View className="flex flex-row items-center gap-x-1">
               <Ionicons name="star-outline" size={18} color="gray" />
               <Text className="my-1 text-gray-500">5 ratings</Text>
