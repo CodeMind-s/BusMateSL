@@ -22,6 +22,9 @@ const userSchema = mongoose.Schema(
     profileImage: {
       type: String,
     },
+    dateofbirth: {
+      type: Date,
+    },
     isAdmin: {
       type: Boolean,
       required: true,

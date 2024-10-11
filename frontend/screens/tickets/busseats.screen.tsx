@@ -79,21 +79,24 @@ const BusSeatsScreen = ({ id }: { id: string | string[] }) => {
   return (
     <SafeAreaView className="flex-1 bg-gray-100 p-4">
       {/* Legend */}
+      <Text className="text-gray-500 font-medium mb-5 text-lg">Select your seat below:</Text>
       <View className="flex-row justify-around gap-5 items-center mb-4">
         <View className="flex-row items-center">
           <View className="w-4 h-4 rounded-full border border-gray-500 mr-2" />
           <Text className="text-gray-500">Available</Text>
         </View>
-        <View className="flex-row items-center">
-          <View className="w-4 h-4 bg-blue-500 rounded-full mr-2" />
-          <Text className="text-blue-500">Male</Text>
+        <View className="flex flex-row px-1 py-1 gap-x-2 bg-slate-300 rounded-md">
+          <View className="flex-row items-center">
+            <View className="w-4 h-4 bg-blue-500 rounded-full mr-1" />
+            <Text className="text-blue-500">Male</Text>
+          </View>
+          <View className="flex-row items-center">
+            <View className="w-4 h-4 bg-pink-500 rounded-full mr-1" />
+            <Text className="text-pink-500">Female</Text>
+          </View>
         </View>
         <View className="flex-row items-center">
-          <View className="w-4 h-4 bg-pink-500 rounded-full mr-2" />
-          <Text className="text-pink-500">Female</Text>
-        </View>
-        <View className="flex-row items-center">
-          <View className="w-4 h-4 bg-green-500 rounded-full mr-2" />
+          <View className="w-4 h-4 bg-green-500 rounded-full mr-1" />
           <Text className="text-green-500">Selected</Text>
         </View>
       </View>

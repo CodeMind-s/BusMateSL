@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,17 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 // import { TailwindProvider } from "tailwindcss-react-native";
 // import CheckBox from "expo-checkbox";
 import { router } from "expo-router";
+import { post } from "@/helpers/api";
+import { AuthContext } from "@/contexts/AuthContext";
+
+interface LoginProps {
+  _id: string;
+  name: string;
+  email: string;
+  contact: string;
+  isAdmin: boolean;
+  token: string;
+}
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -18,12 +29,28 @@ const LoginScreen = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("AuthContext must be used within a AuthProvider");
+  }
+  const { setId, setName, setUserEmail, setToken } = context;
+
+  const handleLogin = async () => {
+    try {
+      const response = await post("/users/auth", { email, password });
+      const data = response.data as LoginProps;
+      setId(data._id);
+      setName(data.name);
+      setUserEmail(data.email);
+      setToken(data.token);
+      router.push("/(tabs)/");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <View className="p-6">
-      <View className="items-center py-6">
-        <Text className="text-xl font-bold">Login</Text>
-      </View>
-
       <View className="items-center my-6">
         <Image
           source={require("../../assets/images/logo.png")} // Replace with your logo path
@@ -38,8 +65,7 @@ const LoginScreen = () => {
             Login
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push("/(routes)/register")}
-        >
+        <TouchableOpacity onPress={() => router.push("/(routes)/register")}>
           <Text className="mx-4 text-lg text-gray-500">Register</Text>
         </TouchableOpacity>
       </View>
@@ -82,15 +108,17 @@ const LoginScreen = () => {
           /> */}
           <Text className="text-gray-600">Remember password</Text>
         </View>
-        <TouchableOpacity onPress={() => router.push("/(routes)/forgotPassword")}
+        <TouchableOpacity
+          onPress={() => router.push("/(routes)/forgotPassword")}
         >
           <Text className="text-blue-500">Forget password</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity className="bg-blue-500 py-3 rounded-lg" onPress={() => {
-            // Add functionality to save changes
-          }}>
+      <TouchableOpacity
+        className="bg-blue-500 py-3 rounded-lg"
+        onPress={handleLogin}
+      >
         <Text className="text-white text-center font-semibold text-lg">
           Login
         </Text>

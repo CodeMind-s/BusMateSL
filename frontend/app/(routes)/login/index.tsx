@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import LoginScreen from "@/screens/login/login.screen";
 
-const login = () => {
+const LoginPage = () => {
   return (
     <View>
       <LoginScreen />
@@ -10,4 +10,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default LoginPage;

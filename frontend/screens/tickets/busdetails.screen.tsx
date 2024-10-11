@@ -5,14 +5,15 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   ScrollView,
+  Alert,
 } from "react-native";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { get } from "@/helpers/api";
 import { TicketContext } from "@/contexts/TicketContext";
+import { Ionicons } from "@expo/vector-icons";
 
 interface SchdeuleProps {
   _id: string;
@@ -46,14 +47,19 @@ const BusDetailsScreen = ({ id }: { id: string | string[] }) => {
   const context = useContext(TicketContext);
 
   if (!context) {
-    // Handle the case where the context is not available (shouldn't happen with a proper setup)
     throw new Error("TicketContext must be used within a MyProvider");
   }
+
   const { setDate, setGender } = context;
   const [scheduleData, setScheduleData] = useState<SchdeuleProps>();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedGender, setSelectedGender] = useState<"Male" | "Female">();
+  const [error, setError] = useState<string>("");
+
+  const currentDate = new Date();
+  const maxDate = new Date();
+  maxDate.setDate(currentDate.getDate() + 14);
 
   useEffect(() => {
     const fetchBus = async () => {
@@ -64,121 +70,203 @@ const BusDetailsScreen = ({ id }: { id: string | string[] }) => {
   }, []);
 
   useEffect(() => {
-    setDate(new Date().toISOString().split('T')[0]);
-    // console.log(`new Date() => `, new Date());
+    setDate(new Date().toISOString().split("T")[0]);
   }, []);
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || new Date();
     setShowDatePicker(false);
     setSelectedDate(currentDate);
-    setDate(currentDate.toISOString().split('T')[0]);
+    setDate(currentDate.toISOString().split("T")[0]);
+  };
+
+  const renderAmenities = (amenities: AmenitiesProps) => {
+    return Object.entries(amenities)
+      .filter(([key, value]) => value === true)
+      .map(([key]) => key.toUpperCase())
+      .join(" | ");
+  };
+
+  const handleConfirm = () => {
+    if (!selectedDate) {
+      setError("Please select a date.");
+      return;
+    }
+
+    if (!selectedGender) {
+      setError("Please select a gender.");
+      return;
+    }
+
+    setError(""); // Clear error if everything is fine
+    router.push({
+      pathname: "/tickets/bus-seating/[id]",
+      params: { id: scheduleData?._id ?? '' },
+    });
   };
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
-      {/* Bus Details */}
-      <View className="bg-white m-5 p-5 rounded-lg shadow-md">
-        <Text className="text-lg font-bold">{scheduleData?.bus.busNumber}</Text>
-        <Text className="my-2 text-gray-500">
-          {scheduleData?.startTime} - {scheduleData?.endTime}
-        </Text>
-        <Text className="my-2 text-gray-500">Amenities print</Text>
-        <Text className="my-2 text-gray-500">4.5 ratings</Text>
-
-        {/* Time Information */}
-        <View className="flex-row justify-between items-center my-4">
-          <Text className="text-base font-bold">{scheduleData?.startTime}</Text>
-          <View className="bg-white p-3 rounded-full border border-gray-300">
-            <Text className="text-2xl">🚌</Text>
+      <ScrollView>
+        <View className="bg-white m-5 p-5 rounded-lg shadow-md">
+          <View className="flex flex-row gap-2 items-center mb-3">
+            <View className="w-[35px] h-[35px] bg-primary rounded-full flex items-center z-10 justify-around">
+              <Ionicons name="bus" size={18} color="white" />
+            </View>
+            <Text className="text-lg font-bold">
+              {scheduleData?.bus.busNumber}
+            </Text>
           </View>
-          <Text className="text-base font-bold">{scheduleData?.endTime}</Text>
-        </View>
+          <View className="flex gap-y-1">
+            <View className="flex flex-row items-center gap-x-1">
+              <Ionicons
+                name="information-circle-outline"
+                size={18}
+                color="gray"
+              />
+              <Text className="text-gray-500">
+                {scheduleData?.bus.amenities
+                  ? renderAmenities(scheduleData.bus.amenities)
+                  : "No amenities available"}
+              </Text>
+            </View>
+            <View className="flex flex-row items-center gap-x-1">
+              <Ionicons name="star-outline" size={18} color="gray" />
+              <Text className="my-1 text-gray-500">5 ratings</Text>
+            </View>
+          </View>
 
-        {/* Date Picker */}
-        <Text className="text-sm text-gray-500 mb-2">Select Date</Text>
-        <TouchableOpacity
-          className="bg-gray-100 p-3 rounded-md border border-gray-300 mb-5"
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text className="text-base text-gray-500">
-            {selectedDate.toISOString().split("T")[0]}
-          </Text>
-        </TouchableOpacity>
+          <View className="flex-row justify-between items-center my-4">
+            <View className="flex">
+              <Text className="text-base text-primary font-bold">
+                {scheduleData?.startTime}
+              </Text>
+              <Text className="text-base font-normal">
+                {scheduleData?.startLocation}
+              </Text>
+            </View>
+            <View className="w-[45px] h-[45px] bg-primary rounded-full flex items-center z-10 justify-around">
+              <Ionicons name="trail-sign" size={20} color="white" />
+            </View>
+            <View className="flex">
+              <Text className="text-base text-primary font-bold">
+                {scheduleData?.endTime}
+              </Text>
+              <Text className="text-base font-normal text-left">
+                {scheduleData?.endLocation}
+              </Text>
+            </View>
+          </View>
 
-        {showDatePicker && (
-          <DateTimePicker
-            value={selectedDate}
-            mode="date"
-            display="default"
-            onChange={onDateChange}
-          />
-        )}
-        {/* Gender Selection */}
-        <View className="my-4">
-          <Text className="text-sm text-gray-500 mb-2">Select Gender</Text>
+          <Text className="text-sm text-gray-500 mb-2">Select Date</Text>
+          <TouchableOpacity
+            className="bg-gray-100 p-3 rounded-md border border-gray-300 "
+            onPress={() => setShowDatePicker(true)}
+          >
+            <Text className="text-base text-gray-500">
+              {selectedDate.toISOString().split("T")[0]}
+            </Text>
+          </TouchableOpacity>
+
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDate}
+              mode="date"
+              display="default"
+              minimumDate={new Date()}
+              maximumDate={maxDate}
+              onChange={onDateChange}
+
+            />
+          )}
+
+          <View className="mt-4">
+            <Text className="text-sm text-gray-500 mb-2">Select Gender</Text>
+            <View className="flex-row justify-between">
+              <TouchableOpacity
+                className={`flex p-3 w-[50%] rounded-md border mr-2 ${selectedGender === "Male"
+                  ? "bg-blue-500 border-blue-500"
+                  : "bg-gray-100 border-gray-300"
+                  }`}
+                onPress={() => {
+                  setSelectedGender("Male");
+                  setGender("Male");
+                }}
+              >
+                <View className="flex flex-row gap-1 items-center">
+                  <Ionicons
+                    name="male"
+                    size={20}
+                    color={selectedGender === "Male" ? "white" : "gray"}
+                  />
+                  <Text
+                    className={`text-center ${selectedGender === "Male"
+                      ? "text-white"
+                      : "text-gray-500"
+                      }`}
+                  >
+                    Male
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className={`flex p-3 w-[50%] rounded-md border ${selectedGender === "Female"
+                  ? "bg-pink-500 border-pink-500"
+                  : "bg-gray-100 border-gray-300"
+                  }`}
+                onPress={() => {
+                  setSelectedGender("Female");
+                  setGender("Female");
+                }}
+              >
+                <View className="flex flex-row gap-1 items-center">
+                  <Ionicons
+                    name="female"
+                    size={20}
+                    color={selectedGender === "Female" ? "white" : "gray"}
+                  />
+                  <Text
+                    className={`text-center ${selectedGender === "Female"
+                      ? "text-white"
+                      : "text-gray-500"
+                      }`}
+                  >
+                    Female
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {error ? (
+            <Text className="text-red-500 text-center my-3">{error}</Text>
+          ) : null}
+
+          <View className="flex flex-row my-5 justify-between items-center">
+            <Text className="text-gray-500 text-base font-normal text-center mt-4">
+              Ticket Price:
+            </Text>
+            <Text className="text-blue-500 text-3xl font-bold text-center mt-4">
+              LKR {scheduleData?.price}.00
+            </Text>
+          </View>
+
           <View className="flex-row justify-between">
             <TouchableOpacity
-              className={`flex-1 p-3 rounded-md border mr-2 ${selectedGender === "Male"
-                ? "bg-blue-500 border-blue-500"
-                : "bg-gray-100 border-gray-300"
-                }`}
-              onPress={() => {
-                setSelectedGender("Male");
-                setGender("Male");
-              }}
+              className="flex-1 bg-white p-3 rounded-md border border-red-500 mr-2"
+              onPress={() => router.back()}
             >
-              <Text
-                className={`text-center ${selectedGender === "Male" ? "text-white" : "text-gray-500"
-                  }`}
-              >
-                Male
-              </Text>
+              <Text className="text-center  text-red-500">Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              className={`flex-1 p-3 rounded-md border ${selectedGender === "Female"
-                ? "bg-blue-500 border-blue-500"
-                : "bg-gray-100 border-gray-300"
-                }`}
-              onPress={() => {
-                setSelectedGender("Female");
-                setGender("Female");
-              }}
+              className="flex-1 bg-blue-500 p-3 rounded-md"
+              onPress={handleConfirm}
             >
-              <Text
-                className={`text-center ${selectedGender === "Female" ? "text-white" : "text-gray-500"
-                  }`}
-              >
-                Female
-              </Text>
+              <Text className="text-center text-white">Confirm</Text>
             </TouchableOpacity>
           </View>
         </View>
-        {/* Price */}
-        <Text className="text-blue-500 text-xl font-bold text-center my-4">
-          LKR {scheduleData?.price}.00
-        </Text>
-
-        <View className="flex-row justify-between">
-          <TouchableOpacity
-            className="flex-1 bg-white p-3 rounded-md border border-red-500 mr-2"
-            onPress={() => router.back()}
-          >
-            <Text className="text-center text-red-500">Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex-1 bg-blue-500 p-3 rounded-md"
-            onPress={() =>
-              router.push({
-                pathname: "/tickets/bus-seating/[id]",
-                params: { id: scheduleData?._id ?? '' },
-              })
-            }
-          >
-            <Text className="text-center text-white">Confirm</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

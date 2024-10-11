@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createSchedule,
+  getAllSchedules,
   getAllSchedulesByBus,
   getScheduleById,
   updateSchedule,
@@ -12,7 +13,7 @@ import { authenticateBus } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").post(createSchedule);
+router.route("/").post(createSchedule).get(getAllSchedules);
 
 router.route("/bus/:id").get(getAllSchedulesByBus);
 

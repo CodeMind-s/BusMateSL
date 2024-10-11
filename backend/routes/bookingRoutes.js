@@ -17,7 +17,7 @@ const router = express.Router();
 router.route("/").post(createBooking).get(getAllBookings);
 
 // @desc    Get all bookings by user
-router.route("/mybookings").get(authenticate, getBookingsByUser);
+router.route("/mybookings/:id").get(getBookingsByUser);
 
 // @desc    Get all bookings by bus
 router.route("/bus").get(getBookingsByBus);
