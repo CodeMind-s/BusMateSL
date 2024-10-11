@@ -48,6 +48,9 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
   const handleMarkAsComplete = () => {
     onUpdateStatus("Complete");
   };
+  const handleMarkAsInProgress = () => {
+    onUpdateStatus("InProgress");
+  };
 
   return (
     <View className="py-3 mt-4 border border-gray-300 w-full rounded-2xl flex justify-around items-center">
@@ -69,7 +72,7 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
           <Text className="text-sm text-[#A1A1A1]">{to}</Text>
         </View>
       </View>
-      {(status === "InComplete" || status === "InProgress") && (
+      {(status === "InProgress") && (
         <View className="mt-3">
           <TouchableOpacity
             className="w-full flex justify-center items-center border-green-500 border rounded-lg"
@@ -77,6 +80,18 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
           >
             <Text className="text-sm font-semibold py-2 px-6 text-green-500">
               Mark as Complete
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {(status === "InComplete" ) && (
+        <View className="mt-3">
+          <TouchableOpacity
+            className="w-full flex justify-center items-center border-yellow-500 border rounded-lg"
+            onPress={handleMarkAsInProgress}
+          >
+            <Text className="text-sm font-semibold py-2 px-6 text-yellow-500">
+              Start Journey
             </Text>
           </TouchableOpacity>
         </View>

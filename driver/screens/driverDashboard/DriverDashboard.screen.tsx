@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ScheduleListCardComponent from '../../components/scheduleListCardComponent/scheduleListCardComponent';
 import { router } from 'expo-router';
@@ -11,10 +11,62 @@ interface BusProps {
   email: string;
   busNumber: string;
 }
+interface Schedule {
+  _id: string;
+  startLocation: string;
+  endLocation: string;
+  startTime: string;
+  endTime: string;
+  date: Date;
+  status: string; // Could be "InComplete", "InProgress", or "Complete"
+}
+
 
 const DriverDashboardScreen = () => {
     const [greeting, setGreeting] = useState("Good Morning");
     const [currentBus, setCurrentBus] = useState<BusProps>();
+    const [schedules, setSchedules] = useState<Schedule[]>([]);
+  
+// Function to check if two dates are the same (ignoring the time)
+const isSameDay = (date1: Date, date2: Date) => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+};
+
+    // Fetch schedules from the server
+    const fetchSchedules = async () => {
+      try {
+        // const busId = "6702d5d22f5aa58766a5fa1c";
+        const response = await get(
+          `schedules/bus`
+        );
+        const responseData = response.data as Schedule[];
+        // console.log('response',responseData);
+  
+        // Get today's date
+        const today = new Date();
+        // Convert the received date strings to Date objects and filter schedules for today
+        const updatedSchedules = responseData
+          .map((schedule: any) => ({
+            ...schedule,
+            date: new Date(schedule.date), 
+           
+          }))
+          .filter((schedule: Schedule) => isSameDay(new Date(schedule.date), today));
+        setSchedules(updatedSchedules);
+      } catch (error) {
+        console.error("Error fetching schedules:", error);
+        Alert.alert("Error", "Unable to fetch schedules");
+      }
+    };
+  
+    useEffect(() => {
+      fetchSchedules();
+    }, [schedules]);
+  
 
     useEffect(() => {
       const fetchBus = async () => {
@@ -86,17 +138,30 @@ const DriverDashboardScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <Text className=" mt-4 font-semibold text-lg">Next Journey</Text>
-      <TouchableOpacity onPress={() => router.push("/(tabs)/schedule")}>
-        <ScheduleListCardComponent
-          id="6702d5d22f5aa58766a5fa1c"
-          startTime="9.00AM"
-          endTime="10.00AM"
-          status="Complete"
-          from="Kurunegala"
-          to="Colombo"
-        />
-      </TouchableOpacity>
+      <Text className=" mt-4 font-semibold text-lg">Current Journey</Text>
+      {(schedules.length > 0 &&
+            schedules.some((schedule) => schedule.status === "InProgress")
+          ) ? (
+            schedules
+              .filter(
+                (schedule) =>
+                   schedule.status === "InProgress"
+              )
+              .map((schedule) => (
+                <View key={schedule._id}>
+                  <ScheduleListCardComponent
+                    id={schedule._id}
+                    from={schedule.startLocation}
+                    to={schedule.endLocation}
+                    startTime={schedule.startTime}
+                    endTime={schedule.endTime}
+                    status={schedule.status}
+                  />
+                </View>
+              ))
+          ) : (
+            <Text>No schedules Found</Text>
+          )}
 
       <View className=" mt-6 bg-gray-200 rounded-xl p-3">
         <Text className=" text-[#5e5e5e] text-base">

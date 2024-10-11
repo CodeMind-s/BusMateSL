@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import ScheduleListCardComponent from "../../components/scheduleListCardComponent/scheduleListCardComponent";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import axios from "axios";
 import { get } from '@/helpers/api';
 
 // Define the structure of a schedule
@@ -57,13 +56,8 @@ const ScheduleScreen = () => {
     }
   };
 
-
-// console.log(schedules);
-
   useEffect(() => {
     fetchSchedules();
-    // const intervalId = setInterval(fetchSchedules, 5000);
-    // return () => clearInterval(intervalId);
   }, [schedules]);
 
   return (
@@ -74,12 +68,12 @@ const ScheduleScreen = () => {
         
         <ScrollView>
         {(schedules.length > 0 &&
-            schedules.some((schedule) => schedule.status === "InComplete" || schedule.status === "InProgress")
+            schedules.some((schedule) => schedule.status === "InComplete")
           ) ? (
             schedules
               .filter(
                 (schedule) =>
-                  schedule.status === "InComplete" || schedule.status === "InProgress"
+                  schedule.status === "InComplete"
               )
               .map((schedule) => (
                 <View key={schedule._id}>
