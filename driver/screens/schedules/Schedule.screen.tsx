@@ -62,9 +62,9 @@ const ScheduleScreen = () => {
 
   useEffect(() => {
     fetchSchedules();
-    const intervalId = setInterval(fetchSchedules, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+    // const intervalId = setInterval(fetchSchedules, 5000);
+    // return () => clearInterval(intervalId);
+  }, [schedules]);
 
   return (
     <View className="bg-swhite flex-1">
@@ -73,20 +73,30 @@ const ScheduleScreen = () => {
         <Text className="text-[21px] font-bold">To be Completed</Text>
         
         <ScrollView>
-          {schedules
-            .filter((schedule) => schedule.status === "InComplete" || schedule.status === "InProgress")
-            .map((schedule) => (
-              <View key={schedule._id}>
-                <ScheduleListCardComponent
-                  id={schedule._id}
-                  from={schedule.startLocation}
-                  to={schedule.endLocation}
-                  startTime={schedule.startTime}
-                  endTime={schedule.endTime}
-                  status={schedule.status}
-                />
-              </View>
-            ))}
+        {(schedules.length > 0 &&
+            schedules.some((schedule) => schedule.status === "InComplete" || schedule.status === "InProgress")
+          ) ? (
+            schedules
+              .filter(
+                (schedule) =>
+                  schedule.status === "InComplete" || schedule.status === "InProgress"
+              )
+              .map((schedule) => (
+                <View key={schedule._id}>
+                  <ScheduleListCardComponent
+                    id={schedule._id}
+                    from={schedule.startLocation}
+                    to={schedule.endLocation}
+                    startTime={schedule.startTime}
+                    endTime={schedule.endTime}
+                    status={schedule.status}
+                  />
+                </View>
+              ))
+          ) : (
+            <Text>No schedules Found</Text>
+          )}
+
         </ScrollView>
         <View className="h-[5%] flex justify-center items-center">
           <Text className="text-[14px] px-2 text-primary ">View more...</Text>

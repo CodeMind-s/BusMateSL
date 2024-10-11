@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, Alert } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { get, put } from '@/helpers/api';
+import { router } from "expo-router";
 
 // Define the props interface
 interface ScheduleListCardComponentProps {
@@ -36,6 +37,7 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
 
       console.log("Schedule updated:", response.data);
       Alert.alert("Success", `Schedule marked as ${newStatus}!`);
+
     } catch (error) {
       console.error("Error updating schedule status:", error);
       Alert.alert("Error", "Failed to update schedule status.");
