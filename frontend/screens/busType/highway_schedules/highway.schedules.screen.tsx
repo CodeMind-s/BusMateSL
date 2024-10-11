@@ -1,39 +1,82 @@
-import { View, TextInput, Button, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import SearchComponent from "../../components/searchScheduleContainerComponent/searchScheduleContainerComponent";
 import ScheduleListCardComponent from "../../components/scheduleListCardComponent/scheduleListCardComponent";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
+import { get } from "../../../helpers/api"; // Ensure you import the `get` method from the api helper
+
+interface Schedule {
+  _id?: string; // Make _id optional
+  startLocation: string;
+  endLocation: string;
+  startTime: string;
+  endTime: string;
+  date: Date;
+  status: string;
+  price: number;
+}
+
 
 const Highway_Schedules = () => {
   // Array to store schedules
-  const [schedules, setSchedules] = useState([
-    { id: 1, from: "Kurunegala", to: "Panadura" },
-    { id: 2, from: "Galle", to: "Colombo" },
-    { id: 3, from: "Kandy", to: "Jaffna" },
-    { id: 4, from: "Anuradhapura", to: "Panadura" },
-  ]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [loading, setLoading] = useState(true); // Loading state to manage loading status
+  const [error, setError] = useState<string>(""); // Error state to manage any errors during data fetching
 
   // State to capture user input
-  const [fromInput, setFromInput] = useState("");
-  const [toInput, setToInput] = useState("");
+  const [fromInput, setFromInput] = useState<string>("");
+  const [toInput, setToInput] = useState<string>("");
+
+  // Fetch schedules from the API
+  const fetchSchedules = async () => {
+    try {
+      const response = await get<Schedule[]>("schedules");
+      const responseData = response.data;
+      setSchedules(responseData); // Assign fetched schedules to the state
+    } catch (err) {
+      console.error("Failed to fetch schedules:", err);
+      setError("Failed to fetch schedules. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Use `useEffect` to fetch schedules when the component mounts
+  useEffect(() => {
+    fetchSchedules();
+  }, []);
 
   // Handle the submission of 'from' and 'to' locations
   const handleSubmit = () => {
     const newSchedule = {
       id: schedules.length + 1, // Generate a new id (ensure this is unique)
-      from: fromInput,
-      to: toInput,
+      startLocation: fromInput,
+      endLocation: toInput,
+      startTime: "", // Placeholder values for now
+      endTime: "",
+      date: new Date(),
+      status: "InComplete",
+      price: 0,
     };
     setSchedules((prevSchedules) => [...prevSchedules, newSchedule]);
     setFromInput("");
     setToInput("");
   };
 
-  const filteredSchedules = schedules.filter(schedule => {
-    const fromMatch = schedule.from.toLowerCase().includes(fromInput.toLowerCase());
-    const toMatch = schedule.to.toLowerCase().includes(toInput.toLowerCase());
-    return fromMatch && toMatch; // Only show schedules that match both inputs
+  // Filter schedules based on user input
+  const filteredSchedules = schedules.filter((schedule) => {
+    const fromMatch = schedule.startLocation.toLowerCase().includes(fromInput.toLowerCase());
+    const toMatch = schedule.endLocation.toLowerCase().includes(toInput.toLowerCase());
+    return fromMatch && toMatch;
   });
+
+  if (loading) {
+    return <View><Text>Loading...</Text></View>;
+  }
+
+  if (error) {
+    return <View><Text>{error}</Text></View>;
+  }
 
   return (
     <View className="h-full bg-swhite pb-4">
@@ -46,11 +89,16 @@ const Highway_Schedules = () => {
       />
       <ScrollView className="px-5">
         {filteredSchedules.map((schedule) => (
-          <TouchableOpacity key={schedule.id}  
-          onPress={() => router.push(`/highway_schedules_details?id=${schedule.id}`)}>
+          <TouchableOpacity 
+            key={schedule._id} 
+            onPress={() => router.push(`/highway_schedules_details?id=${schedule._id}`)}
+          >
             <ScheduleListCardComponent
-              from={schedule.from}
-              to={schedule.to}
+              from={schedule.startLocation}
+              to={schedule.endLocation}
+              startTime={schedule.startTime}
+              endTime={schedule.endTime}
+
             />
           </TouchableOpacity>
         ))}
