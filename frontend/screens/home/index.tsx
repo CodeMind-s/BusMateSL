@@ -1,18 +1,27 @@
 import { View, Image, Text, TouchableOpacity, ImageBackground } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import TrackbusScreen from "@/screens/track-bus/trackbus.screen";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
+import { AuthContext } from "@/contexts/AuthContext";
 
 const Home = () => {
   const navigation = useNavigation();
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error(
+      "AuthContext must be used within a TicketProvider or AuthProvider"
+    );
+  }
+  const { name: userName, id } = authContext;
+  console.log(`idHome => `, id);
 
   const [greeting, setGreeting] = useState("Good Morning");
   const [thought, setThought] = useState("You are never late in life :)");
-  const [name, setName] = useState("Andrew Garfield");
+  const [name, setName] = useState(userName);
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -33,7 +42,7 @@ const Home = () => {
           className="rounded-full mr-3"
         />
         <View>
-          <Text className=" text-[16px] " style={{ fontWeight: "900" }}>
+          <Text className=" text-[16px] " style={{ fontWeight: "400" }}>
             {greeting}
           </Text>
           <Text
