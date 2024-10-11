@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, Alert } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { get, put } from '@/helpers/api';
+import { router } from "expo-router";
 
 // Define the props interface
 interface ScheduleListCardComponentProps {
@@ -11,6 +12,7 @@ interface ScheduleListCardComponentProps {
   startTime: string;
   endTime: string;
   status: string; // Make status required
+  btn: boolean;
 }
 
 // Define the functional component
@@ -21,6 +23,7 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
   startTime,
   endTime,
   status,
+  btn
 }) => {
   // Function to update schedule status
   const onUpdateStatus = async (newStatus: string) => {
@@ -36,6 +39,7 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
 
       console.log("Schedule updated:", response.data);
       Alert.alert("Success", `Schedule marked as ${newStatus}!`);
+
     } catch (error) {
       console.error("Error updating schedule status:", error);
       Alert.alert("Error", "Failed to update schedule status.");
@@ -43,6 +47,11 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
   };
 
   // Function to handle marking as complete
+  const handleMarkAsInprogress = () => {
+    onUpdateStatus("InProgress");
+    router.push("/(tabs)/track-bus");
+  };
+
   const handleMarkAsComplete = () => {
     onUpdateStatus("Complete");
   };
@@ -67,13 +76,25 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
           <Text className="text-sm text-[#A1A1A1]">{to}</Text>
         </View>
       </View>
-      {(status === "InComplete" || status === "InProgress") && (
+      {btn == true && status === "InComplete" && (
         <View className="mt-3">
           <TouchableOpacity
             className="w-full flex justify-center items-center border-green-500 border rounded-lg"
-            onPress={handleMarkAsComplete}
+            onPress={handleMarkAsInprogress}
           >
             <Text className="text-sm font-semibold py-2 px-6 text-green-500">
+              Start Route
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {btn == true && status === "InProgress" && (
+        <View className="mt-3">
+          <TouchableOpacity
+            className="w-full flex justify-center items-center border-orange-500 border rounded-lg"
+            onPress={handleMarkAsComplete}
+          >
+            <Text className="text-sm font-semibold py-2 px-6 text-orange-500">
               Mark as Complete
             </Text>
           </TouchableOpacity>

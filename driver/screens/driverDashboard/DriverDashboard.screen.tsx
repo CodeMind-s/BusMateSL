@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, Pressable } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Pressable, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ScheduleListCardComponent from '../../components/scheduleListCardComponent/scheduleListCardComponent';
 import { Link, router } from 'expo-router';
@@ -13,25 +13,76 @@ interface BusProps {
   email: string;
   busNumber: string;
 }
+interface Schedule {
+  _id: string;
+  startLocation: string;
+  endLocation: string;
+  startTime: string;
+  endTime: string;
+  date: Date;
+  status: string; // Could be "InComplete", "InProgress", or "Complete"
+}
+
 
 const DriverDashboardScreen = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const isPermissionGranted = Boolean(permission?.granted);
+    const [greeting, setGreeting] = useState("Good Morning");
+    const [currentBus, setCurrentBus] = useState<BusProps>();
+    const [schedules, setSchedules] = useState<Schedule[]>([]);
+  
+// Function to check if two dates are the same (ignoring the time)
+const isSameDay = (date1: Date, date2: Date) => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+};
 
-  const [greeting, setGreeting] = useState("Good Morning");
-  const [currentBus, setCurrentBus] = useState<BusProps>();
-
-  useEffect(() => {
-    const fetchBus = async () => {
+    // Fetch schedules from the server
+    const fetchSchedules = async () => {
       try {
-        const response = await get(`buses/profile`);
-        setCurrentBus(response.data as BusProps);
+        // const busId = "6702d5d22f5aa58766a5fa1c";
+        const response = await get(
+          `schedules/bus`
+        );
+        const responseData = response.data as Schedule[];
+        // console.log('response',responseData);
+  
+        // Get today's date
+        const today = new Date();
+        // Convert the received date strings to Date objects and filter schedules for today
+        const updatedSchedules = responseData
+          .map((schedule: any) => ({
+            ...schedule,
+            date: new Date(schedule.date), 
+           
+          }))
+          .filter((schedule: Schedule) => isSameDay(new Date(schedule.date), today));
+        setSchedules(updatedSchedules);
       } catch (error) {
-        console.error("Error fetching bus profile:", error);
+        console.error("Error fetching schedules:", error);
+        Alert.alert("Error", "Unable to fetch schedules");
       }
     };
-    fetchBus();
-  }, []);
+  
+    useEffect(() => {
+      fetchSchedules();
+    }, [schedules]);
+  
+
+    useEffect(() => {
+      const fetchBus = async () => {
+          try {
+              const response = await get(`buses/profile`);
+              setCurrentBus(response.data as BusProps);
+          } catch (error) {
+              console.error("Error fetching bus profile:", error);
+          }
+        };
+        fetchBus();
+    }, []);
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -62,7 +113,7 @@ const DriverDashboardScreen = () => {
 
       <TouchableOpacity
         onPress={() => router.push("/(tabs)/track-bus")}
-        className=" w-full py-5 bg-primary rounded-xl mt-6"
+        className=" w-full py-4 bg-primary rounded-xl mt-5"
       >
         <View className="flex flex-row justify-center gap-2 items-center">
           <Ionicons name="location" size={21} color="white" />
@@ -101,8 +152,7 @@ const DriverDashboardScreen = () => {
       <View className=" flex flex-row justify-between items-center">
         <TouchableOpacity
           onPress={() => router.push("/(routes)/announcement")}
-          className=" w-[100%] py-5 bg-primary rounded-xl mt-6"
-        >
+          className=" w-[100%] py-5 bg-primary rounded-xl mt-6">
           <View className="flex flex-row justify-center items-center gap-2">
             <Ionicons name="chatbubbles" size={21} color="white" />
             <Text className=" text-center text-lg font-bold text-white">
@@ -112,19 +162,33 @@ const DriverDashboardScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <Text className=" mt-4 font-semibold text-lg">Next Journey</Text>
-      <TouchableOpacity onPress={() => router.push("/(tabs)/schedule")}>
-        <ScheduleListCardComponent
-          id="6702d5d22f5aa58766a5fa1c"
-          startTime="9.00AM"
-          endTime="10.00AM"
-          status="Complete"
-          from="Kurunegala"
-          to="Colombo"
-        />
-      </TouchableOpacity>
+      <Text className=" mt-3 font-semibold text-lg">Current Journey</Text>
+      {(schedules.length > 0 &&
+            schedules.some((schedule) => schedule.status === "InProgress")
+          ) ? (
+            schedules
+              .filter(
+                (schedule) =>
+                   schedule.status === "InProgress"
+              )
+              .map((schedule) => (
+                <View key={schedule._id}>
+                  <ScheduleListCardComponent
+                    id={schedule._id}
+                    from={schedule.startLocation}
+                    to={schedule.endLocation}
+                    startTime={schedule.startTime}
+                    endTime={schedule.endTime}
+                    status={schedule.status}
+                    btn={true}
+                  />
+                </View>
+              ))
+          ) : (
+            <Text>No schedules Found</Text>
+          )}
 
-      <View className=" mt-6 bg-gray-200 rounded-xl p-3">
+      <View className=" mt-5 bg-gray-200 rounded-xl p-3">
         <Text className=" text-[#5e5e5e] text-base">
           Monthly Earning so far,{" "}
         </Text>

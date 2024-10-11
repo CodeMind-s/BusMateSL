@@ -99,9 +99,12 @@ const RootLayout = () => {
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({ onBack, title }) => (
   <View style={styles.headerContainer}>
-    <TouchableOpacity onPress={onBack} style={styles.backButton}>
+     {title !== "Login" && title !== "Register" && title !== "Ticket Details" && (
+      <TouchableOpacity onPress={onBack} style={styles.backButton}>
       <Ionicons name="arrow-back-circle-outline" size={28} color="white" />
     </TouchableOpacity>
+     )}
+
     {/* Apply the title prop to the header text */}
     <Text style={styles.headerText}>{title}</Text>
   </View>

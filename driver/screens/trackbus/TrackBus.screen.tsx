@@ -4,11 +4,30 @@ import * as Location from 'expo-location';
 import { Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Fontisto from '@expo/vector-icons/Fontisto';
+import { get } from '@/helpers/api';
 
 interface LocationCoords {
   latitude: number;
   longitude: number;
 }
+
+interface Schedule {
+  _id: string;
+  startLocation: string;
+  endLocation: string;
+  startTime: string;
+  endTime: string;
+  date: Date;
+  status: string;
+}
+
+const isSameDay = (date1: Date, date2: Date) => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+};
 
 const TrackbusScreen = () => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
@@ -18,6 +37,39 @@ const TrackbusScreen = () => {
   const [destinationLocation, setDestinationLocation] = useState('Nugegoda');
   const [startLocation, setStartLocation] = useState('Kaduwela');
   const [searchResult, setSearchResult] = useState('');
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [inProgressSchedule, setInProgressSchedule] = useState<Schedule>();
+  
+  const fetchSchedules = async () => {
+    try {
+      const response = await get(
+        `schedules/bus`
+      );
+      const responseData = response.data as Schedule[];
+      const today = new Date();
+      const updatedSchedules = responseData
+        .map((schedule: any) => ({
+          ...schedule,
+          date: new Date(schedule.date), 
+         
+        }))
+        .filter((schedule: Schedule) => isSameDay(new Date(schedule.date), today));
+      setSchedules(updatedSchedules);
+    } catch (error) {
+      console.error("Error fetching schedules:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchedules();
+    const inProgressSch = schedules.find(schedule => schedule.status === "InProgress");
+    if(inProgressSch){
+      setInProgressSchedule(inProgressSch);
+    }
+    else{
+      setUserLocationOn(false);
+    }
+  }, [schedules])
 
   useEffect(() => {
     const getLocation = async () => {
@@ -82,9 +134,9 @@ const TrackbusScreen = () => {
 
       const fetchAndDisplayRoute = async () => {
         const startLatLng = [${location?.latitude}, ${location?.longitude}];
-        const destinationLatLng = await geocodeLocation("${destinationLocation}");
+        const destinationLatLng = await geocodeLocation("${inProgressSchedule?.endLocation}");
        
-        L.marker(destinationLatLng, { icon: redIcon }).addTo(mymap).bindPopup('${destinationLocation}');
+        L.marker(destinationLatLng, { icon: redIcon }).addTo(mymap).bindPopup('${inProgressSchedule?.endLocation}');
         mymap.setView(destinationLatLng, 12);
 
         if (startLatLng && destinationLatLng) {
@@ -102,7 +154,7 @@ const TrackbusScreen = () => {
     if (location) {
       searchHandler();
     }
-  }, [location, destinationLocation]);
+  }, [location]);
 
   useEffect(() => {
     const mapHTML = `
@@ -172,7 +224,7 @@ const TrackbusScreen = () => {
                 L.marker(userLocation, { icon: userLocationIcon }).addTo(mymap).bindPopup('Your Location');
                 mymap.setView(userLocation, 12);
 
-                if("${destinationLocation}") {
+                if("${inProgressSchedule?.endLocation}") {
                   ${searchResult}
                 }
               }
@@ -182,7 +234,7 @@ const TrackbusScreen = () => {
     `;
 
     setLeafletHTML(mapHTML);
-  }, [location, destinationLocation, searchResult, userLocationIsOn]);
+  }, [location, searchResult, userLocationIsOn]);
 
   return (
     <View className=' h-full relative'>

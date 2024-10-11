@@ -87,7 +87,7 @@ const LoginScreen = () => {
 
       <View className="flex-row justify-between items-center mb-6">
         <View className="flex-row items-center">
-          <Text className="text-gray-600">Remember password</Text>
+          {/* <Text className="text-gray-600">Remember password</Text> */}
         </View>
         <TouchableOpacity onPress={() => router.push("/(routes)/forgotPassword")}
         >

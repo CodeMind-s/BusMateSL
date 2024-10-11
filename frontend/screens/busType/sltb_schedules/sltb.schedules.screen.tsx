@@ -10,6 +10,8 @@ const SLTB_Schedules = () => {
     { id: 1, from: "Colombo", to: "Panadura" },
     { id: 2, from: "Kandy", to: "Jaffna" },
     { id: 3, from: "Galle", to: "Colombo" },
+    { id: 4, from: "Jaffna", to: "Kandy" },
+    { id: 5, from: "Colombo", to: "Galle" },
 
   ]);
 
@@ -51,6 +53,8 @@ const SLTB_Schedules = () => {
             onPress={() => router.push(`/sltb_schedules_details?id=${schedule.id}`)}
           >
             <ScheduleListCardComponent
+            startTime='08.00AM'
+            endTime='09.00AM'
               from={schedule.from}
               to={schedule.to}
             />

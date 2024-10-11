@@ -10,9 +10,7 @@ const Intercity_Schedules = () => {
     { id: 1, from: "Colombo", to: "Panadura" },
     { id: 2, from: "Kandy", to: "Jaffna" },
     { id: 3, from: "Galle", to: "Colombo" },
-    { id: 4, from: "Panadura", to: "Colombo" },
-    { id: 5, from: "Kandy", to: "Jaffna" },
-    { id: 6, from: "Galle", to: "Colombo" },
+
   ]);
 
   // State to capture user input
@@ -53,6 +51,8 @@ const Intercity_Schedules = () => {
             onPress={() => router.push(`/intercity_schedules_details?id=${schedule.id}`)}
           >
             <ScheduleListCardComponent
+            startTime='08.00AM'
+            endTime='09.00AM'
               from={schedule.from}
               to={schedule.to}
             />

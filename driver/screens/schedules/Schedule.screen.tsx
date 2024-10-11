@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import ScheduleListCardComponent from "../../components/scheduleListCardComponent/scheduleListCardComponent";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import axios from "axios";
 import { get } from '@/helpers/api';
 
 // Define the structure of a schedule
@@ -53,40 +52,40 @@ const ScheduleScreen = () => {
       setSchedules(updatedSchedules);
     } catch (error) {
       console.error("Error fetching schedules:", error);
-      Alert.alert("Error", "Unable to fetch schedules");
     }
   };
 
-
-// console.log(schedules);
-
   useEffect(() => {
     fetchSchedules();
-    const intervalId = setInterval(fetchSchedules, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+  }, [schedules]);
 
   return (
     <View className="bg-swhite flex-1">
       {/* To be Completed Section */}
-      <View className="h-[50%] px-5 pt-5">
+      <View className="h-[54%] px-5 pt-5">
         <Text className="text-[21px] font-bold">To be Completed</Text>
         
         <ScrollView>
-          {schedules
-            .filter((schedule) => schedule.status === "InComplete" || schedule.status === "InProgress")
-            .map((schedule) => (
-              <View key={schedule._id}>
-                <ScheduleListCardComponent
-                  id={schedule._id}
-                  from={schedule.startLocation}
-                  to={schedule.endLocation}
-                  startTime={schedule.startTime}
-                  endTime={schedule.endTime}
-                  status={schedule.status}
-                />
-              </View>
-            ))}
+        { schedules && schedules.length > 0 ? (
+            schedules
+              .filter((schedule) => schedule.status === "InComplete" || schedule.status === "InProgress")
+              .map((schedule, index) => (
+                <View key={schedule._id}>
+                  <ScheduleListCardComponent
+                    id={schedule._id}
+                    from={schedule.startLocation}
+                    to={schedule.endLocation}
+                    startTime={schedule.startTime}
+                    endTime={schedule.endTime}
+                    status={schedule.status}
+                    btn={index === 0}
+                  />
+                </View>
+              ))
+          ) : (
+            <Text className=" h-full w-full text-center mt-9 text-[#A1A1A1]">No Schedules Found</Text>
+          )
+        }
         </ScrollView>
         <View className="h-[5%] flex justify-center items-center">
           <Text className="text-[14px] px-2 text-primary ">View more...</Text>
@@ -94,7 +93,7 @@ const ScheduleScreen = () => {
       </View>
 
       {/* Completed Section */}
-      <View className="h-[50%] p-5">
+      <View className="h-[48%] p-5">
         <Text className="text-[21px] font-bold">Completed</Text>
         <ScrollView>
           {schedules
@@ -108,6 +107,7 @@ const ScheduleScreen = () => {
                 startTime={schedule.startTime}
                 endTime={schedule.endTime}
                 status={schedule.status}
+                btn={false}
               />
             ))}
         </ScrollView>

@@ -6,8 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 const ScheduleScreen = () => {
   return (
     <View className="h-full bg-swhite px-6 py-4 ">
-      <View className="h-[10%] my-2">
-        <Text className=" text-[24px] " style={{ fontWeight: "900" }}>
+      <View className=" my-2">
+        <Text className=" text-[20px] " style={{ fontWeight: "900" }}>
           Choose the bus type you desire to explore.
         </Text>
       </View>
@@ -22,8 +22,8 @@ const ScheduleScreen = () => {
             imageStyle={{ borderTopLeftRadius: 15 , borderTopRightRadius: 15 , opacity:0.7}}
             className=" bg-black rounded-t-2xl"
           />
-            <View className="bg-primary h-[30%] rounded-b-xl p-2 justify-center items-center">
-              <Text className="text-white text-center text-[20px] font-bold">
+            <View className="bg-primary h-[25%] rounded-b-xl p-2 justify-center items-center">
+              <Text className="text-white text-center text-[18px] font-bold">
                 High-Way Schedules
               </Text>
             </View>
@@ -39,8 +39,8 @@ const ScheduleScreen = () => {
              imageStyle={{ borderTopLeftRadius: 15 , borderTopRightRadius: 15 , opacity:0.7}}
             className=" bg-black rounded-t-2xl"
           />
-            <View className="bg-primary h-[30%] rounded-b-xl p-2 justify-center items-center">
-              <Text className="text-white text-center text-[20px] font-bold">
+            <View className="bg-primary h-[25%] rounded-b-xl p-2 justify-center items-center">
+              <Text className="text-white text-center text-[19px] font-bold">
                 SLTB Schedules
               </Text>
             </View>
@@ -57,8 +57,8 @@ const ScheduleScreen = () => {
              imageStyle={{ borderTopLeftRadius: 15 , borderTopRightRadius: 15 , opacity:0.7}}
             className=" bg-black rounded-t-2xl"
           />
-            <View className="bg-primary h-[30%] rounded-b-xl p-2 justify-center items-center">
-              <Text className="text-white text-center text-[20px] font-bold">
+            <View className="bg-primary h-[25%] rounded-b-xl p-2 justify-center items-center">
+              <Text className="text-white text-center text-[18px] font-bold">
                 Intercity Schedules
               </Text>
             </View>
@@ -74,8 +74,8 @@ const ScheduleScreen = () => {
              imageStyle={{ borderTopLeftRadius: 15 , borderTopRightRadius: 15 , opacity:0.7}}
             className=" bg-black rounded-t-2xl"
           />
-            <View className="bg-primary h-[30%] rounded-b-xl p-2 justify-center items-center">
-              <Text className="text-white text-center text-[20px] font-bold">
+            <View className="bg-primary h-[25%] rounded-b-xl p-2 justify-center items-center">
+              <Text className="text-white text-center text-[18px] font-bold">
                 Private Bus Schedules
               </Text>
             </View>

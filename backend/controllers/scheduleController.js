@@ -66,7 +66,7 @@ const getAllSchedulesByBus = asyncHandler(async (req, res) => {
 const getScheduleById = asyncHandler(async (req, res) => {
   const schedule = await Schedule.findById(req.params.id).populate({
     path: "bus",
-    select: "busNumber busName from to amenities",
+    select: "busNumber busName from to amenities routeNumber estimatedTime phoneNumber",
   });
 
   if (schedule) {
@@ -75,6 +75,8 @@ const getScheduleById = asyncHandler(async (req, res) => {
     res.status(404).json({ message: "Schedule not found" });
   }
 });
+
+
 
 // @desc    Update a schedule
 // @route   PUT /api/schedules/:id

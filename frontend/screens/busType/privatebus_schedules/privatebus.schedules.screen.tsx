@@ -10,7 +10,7 @@ const PrivateBus_Schedules = () => {
     { id: 1, from: "Colombo", to: "Panadura" },
     { id: 2, from: "Kandy", to: "Jaffna" },
     { id: 3, from: "Galle", to: "Colombo" },
-    { id: 4, from: "Anuradhapura", to: "Panadura" },
+    { id: 4, from: "Colombo", to: "Galle" },
   ]);
 
   // State to capture user input
@@ -51,6 +51,8 @@ const PrivateBus_Schedules = () => {
             onPress={() => router.push(`/privatebus_schedules_details?id=${schedule.id}`)}
           >
             <ScheduleListCardComponent
+            startTime='08.00AM'
+            endTime='09.00AM'
               from={schedule.from}
               to={schedule.to}
             />
