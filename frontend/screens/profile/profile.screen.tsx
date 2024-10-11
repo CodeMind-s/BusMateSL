@@ -48,7 +48,7 @@ const ProfileScreen = () => {
     <View className='flex-1 bg-swhite'>
       <ScrollView className="  -mt-5">
         {/* Profile Image and Edit Icon */}
-        <View className='items-center py-6 mb-6 bg-Secondary rounded-b-[20px] '>
+        <View className='items-center py-6 mb- bg-S rounded-b-[20px] '>
           <View className='relative'>
             <Image
 
