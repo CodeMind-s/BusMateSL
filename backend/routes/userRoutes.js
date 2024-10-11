@@ -31,7 +31,7 @@ router
 router
   .route("/:id")
   .delete(deleteUserById)
-  .get(authenticate, getUserById)
+  .get(getUserById)
   .put(updateUserById);
 
 export default router;
