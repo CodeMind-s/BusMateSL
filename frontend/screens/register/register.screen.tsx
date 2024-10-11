@@ -8,6 +8,7 @@ import {
   ScrollView, // Import ScrollView
 } from "react-native";
 import CheckBox from "expo-checkbox";
+
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { post } from "@/helpers/api";
@@ -46,6 +47,7 @@ const RegisterScreen = () => {
       alert("Registration failed. Please try again.");
     }
   };
+
 
   return (
     <ScrollView // Wrap the main content in ScrollView
@@ -197,6 +199,7 @@ const RegisterScreen = () => {
             </TouchableOpacity>
           </View>
 
+
           <View
             style={{
               flexDirection: "row",
@@ -226,7 +229,7 @@ const RegisterScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

@@ -11,10 +11,22 @@ const busSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  busName: {
+    type: String,
+    required: true,
+  },
   busNumber: {
     type: String,
     required: true,
     unique: true,
+  },
+  routeNumber: {
+    type: Number,
+    required: true,
+  },
+  estimatedTime: {
+    type: String,
+    required: true,
   },
   type: {
     type: String,

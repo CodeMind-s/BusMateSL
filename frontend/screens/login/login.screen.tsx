@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 // import { TailwindProvider } from "tailwindcss-react-native";
-import CheckBox from "expo-checkbox";
+// import CheckBox from "expo-checkbox";
 import { router } from "expo-router";
 import { post } from "@/helpers/api";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -101,11 +101,11 @@ const LoginScreen = () => {
 
       <View className="flex-row justify-between items-center mb-6">
         <View className="flex-row items-center">
-          <CheckBox
+          {/* <CheckBox
             value={rememberMe}
             onValueChange={setRememberMe}
             style={{ marginRight: 8 }}
-          />
+          /> */}
           <Text className="text-gray-600">Remember password</Text>
         </View>
         <TouchableOpacity

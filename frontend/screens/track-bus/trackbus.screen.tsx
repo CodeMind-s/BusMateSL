@@ -179,8 +179,6 @@ const TrackbusScreen = () => {
         const startLatLng = await geocodeLocation("${startLocation}");
         const destinationLatLng = await geocodeLocation("${destinationLocation}");
 
-        console.log(startLatLng, destinationLatLng);  // Corrected typo
-
         if (startLatLng && destinationLatLng) {
           updateRoute(startLatLng, destinationLatLng);
         } else {
@@ -193,17 +191,14 @@ const TrackbusScreen = () => {
     setIsSearchActive(false);
   }   
 
-  
   const clickHandler = () => {
     setIsBusClick(!isBusClick);
     setIsBusdetailWindowActive(false);
   };  
 
-  // useEffect(()=>{
-    const routeBusHandller = () =>{
-      // SetIsSearchResultActive(false);
-      setIsBusesInRouteActive(true);
-      setIsBusdetailWindowActive(true);
+  const routeBusHandller = () =>{
+    setIsBusesInRouteActive(true);
+    setIsBusdetailWindowActive(true);
 
     if(startLocation=== 'Kaduwela' && destinationLocation==='Kollupitiya'){
       const busMarkersScript = Object.keys(buses).map((busKey) => {
@@ -224,22 +219,9 @@ const TrackbusScreen = () => {
     else{
       setBusesInRoute('');
     }
-    };
-
-  // const mark=`
-  //       const userLocation = [6.934101, 79.859634];
-  //       const marker = L.marker(userLocation, { icon: userLocationIcon }).addTo(mymap).bindPopup('Your Location');
-  //       mymap.setView(userLocation, 12);
-
-  //      marker.on('click', function() {
-  //       window.ReactNativeWebView.postMessage('markerClicked');
-  //     });
-  //     `
-
-   
+    };  
 
   useEffect(() => {
-    // if (!location) return;
     const mapHTML = `
       <!DOCTYPE html>
       <html>
@@ -276,7 +258,11 @@ const TrackbusScreen = () => {
         <body>
             <div id="map"></div>
             <script>
-              const mymap = L.map('map').setView([${location?.latitude || 6.934101}, ${location?.longitude || 79.859634}], 12);
+              const mymap = L.map('map', {
+                center: [${location?.latitude || 6.934101}, ${location?.longitude || 79.859634}], 
+                zoom: 12,
+                zoomControl: false
+              });
               
               const userLocationIcon = L.divIcon({
                   className: 'custom-icon', // Use your custom class
@@ -322,6 +308,12 @@ const TrackbusScreen = () => {
     setLeafletHTML((prevHTML) => (prevHTML !== mapHTML ? mapHTML : prevHTML));
 
   }, [location, userLocationIsOn, markersScript, searchResult, isSearchResultActive, isBusesInRouteActive]);
+
+  const busResultCloseHandler = () => {
+    SetIsSearchResultActive(false);
+    setIsBusdetailWindowActive(false);
+    setIsBusesInRouteActive(false);
+  }
   
   return (
     <View className=' h-full relative'>
@@ -362,7 +354,7 @@ const TrackbusScreen = () => {
       )}
 
       {isBusdetailWindowActive && (
-        <TouchableOpacity onPress={()=>SetIsSearchResultActive(false)} className=' absolute top-12 right-2 flex justify-center items-center bg-swhite p-1 rounded-full shadow-xl shadow-black'>
+        <TouchableOpacity onPress={busResultCloseHandler} className=' absolute top-12 right-2 flex justify-center items-center bg-swhite p-1 rounded-full shadow-xl shadow-black'>
           <Ionicons name="close-sharp" size={24} color="black" />
         </TouchableOpacity>
       )}

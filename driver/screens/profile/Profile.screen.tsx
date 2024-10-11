@@ -1,63 +1,99 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import tailwind from "tailwind-react-native-classnames";
 import * as Linking from 'expo-linking';
 import { router } from "expo-router";
+import { get, post } from "@/helpers/api";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+
+interface BusProps {
+  _id: string;
+  busName: string;
+  email: string;
+  busNumber: string;
+}
 
 
 const ProfileScreen = () => {
-  const navigation = useNavigation();
+  const [currentBus, setCurrentBus] = useState<BusProps>();
+
+  useEffect(() => {
+    const fetchBus = async () => {
+        try {
+            const response = await get(`buses/profile`);
+            setCurrentBus(response.data as BusProps);
+        } catch (error) {
+            console.error("Error fetching bus profile:", error);
+        }
+      };
+      fetchBus();
+  }, []);
+
+
+  const logoutHandler = async () => {
+    try {
+        const response = await post(`buses/logout`, {}); 
+        if (response.status === 200) {
+            // console.log("Logout successful", response);
+            router.push("/(routes)/login");
+        } else {
+            console.error("Logout failed: unexpected response", response);
+        }
+    } catch (error) {
+        console.error("Error during logout:", error);
+    }
+};
 
   return (
-    <View style={tailwind`flex-1 bg-gray-100`}>
-      <ScrollView contentContainerStyle={tailwind`p-6`}>
+    <View className='flex-1 bg-swhite'>
+      {/* <View> */}
         {/* Profile Image and Edit Icon */}
-        <View style={tailwind`items-center mb-6`}>
-          <View style={tailwind`relative`}>
+        <View className='items-center -mt-6 bg-Secondary rounded-b-[20px] py-6'>
+          <View className='relative'>
             <Image
-              source={{ uri: "https://randomuser.me/api/portraits/women/44.jpg" }}
-              style={tailwind`w-28 h-28 rounded-full border-4 border-white`}
+              source={{ uri: "https://t4.ftcdn.net/jpg/02/18/58/51/360_F_218585163_hKijGOfFIkC3Fuo9JgX2sVGv69UKoXmM.jpg" }}
+              className='w-28 h-28 rounded-full border-4 border-white'
             />
-            <TouchableOpacity
-              style={tailwind`absolute bottom-0 right-0 bg-white p-1 rounded-full`}
-              onPress={() => router.push("/(routes)/login")}
-            >
-              <Ionicons name="pencil-outline" size={20} color="black" />
-            </TouchableOpacity>
           </View>
-          <Text style={tailwind`text-lg font-bold text-black mt-4`}>Happy Travel</Text>
-          <Text style={tailwind`text-gray-500`}>happytravel@gmail.com</Text>
+          <Text className='text-2xl font-bold text-white mt-4'>{currentBus?.busName}</Text>
+          <Text className='text-gray-500'>{currentBus?.email}</Text>
         </View>
-
-        {/* Options */}
-        
-        <View style={tailwind`mt-8`}>
+        <View className=" px-3 mt-4">
+          <TouchableOpacity
+            onPress={() => router.push("/(tabs)/schedule")}
+            className='flex-row items-center justify-between p-4 rounded-lg border-b-2 border-[#A1A1A1]/50'
+          >
+            <View className='flex-row items-center'>
+              <Ionicons name="calendar-outline" size={24} color="black" />
+              <Text className='ml-4 font-semibold text-base'>Your Schedules</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="black" />
+          </TouchableOpacity>
           
           <TouchableOpacity
-          onPress={() => router.push("/(routes)/login")}
-            style={tailwind`flex-row items-center justify-between p-4 bg-white rounded-lg mb-2`}
+            onPress={() => router.push("/(routes)/editBusProfile")}
+            className='flex-row items-center justify-between p-4 rounded-lg border-b-2 border-[#A1A1A1]/50'
           >
-            <View style={tailwind`flex-row items-center`}>
-              <Ionicons name="location-outline" size={24} color="black" />
-              <Text style={tailwind`ml-4 font-bold text-lg text-base`}>Registration details</Text>
+            <View className='flex-row items-center'>
+              <FontAwesome name="edit" size={24} color="black" />
+              <Text className='ml-4 font-semibold text-base'>Edit Bus Details</Text>
             </View>
-            <Ionicons name="chevron-forward" size={24} color="black" />
+            <Ionicons name="chevron-forward" size={20} color="black" />
           </TouchableOpacity>
 
           <TouchableOpacity
-          onPress={() => router.push("/(routes)/login")}
-            style={tailwind`flex-row items-center justify-between p-4 bg-white rounded-lg mb-2`}
+            onPress={logoutHandler}
+            className='flex-row items-center justify-between p-4 rounded-lg mb-2'
           >
-            <View style={tailwind`flex-row items-center`}>
-              <Ionicons name="calendar-outline" size={24} color="black" />
-              <Text style={tailwind`ml-4 font-bold text-lg text-base`}> Bank Account</Text>
+            <View className='flex-row items-center'>
+              <MaterialIcons name="logout" size={24} color="black" />
+              <Text className='ml-4 font-semibold text-base'> Log Out</Text>
             </View>
-            <Ionicons name="chevron-forward" size={24} color="black" />
+            <Ionicons name="chevron-forward" size={20} color="black" />
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      {/* </> */}
     </View>
   );
 };

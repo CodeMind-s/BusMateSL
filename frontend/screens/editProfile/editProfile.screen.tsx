@@ -114,7 +114,7 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <View className="h-full bg-swhite px-6 py-4">
+    <View className="h-[120vh] bg-swhite -mt-9 py-4">
       {/* Dark Background Header */}
       <View className="flex items-center justify-start rounded-b-2xl mb-4">
         <TouchableOpacity onPress={pickImage} className="relative">
@@ -139,6 +139,7 @@ const EditProfileScreen = () => {
           />
         </View>
 
+
         <View className="mb-4">
           <Text className="mb-2 text-lg font-bold">Email</Text>
           <TextInput
@@ -146,6 +147,7 @@ const EditProfileScreen = () => {
             onChangeText={setEmail}
             keyboardType="email-address"
             className="border border-gray-300 p-3 rounded-lg bg-white"
+
           />
         </View>
 

@@ -1,3 +1,5 @@
+import { post } from '@/helpers/api';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 
@@ -11,20 +13,63 @@ const RegisterScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [seatCount, setSeatCount] = useState('');
   const [password, setPassword] = useState('');
+  const [busName, setBusName] = useState('bus123');
+  const [routeNumber, setRouteNumber] = useState('1');
+  const [estimatedTime, setEstimatedTime] = useState('00');
+  const [amenities, setAmenities] = useState([]);
 
-  const handleRegister = () => {
-    // Implement your registration logic here
-    console.log('Registration details:', {
-      driverNumber,
-      conductorNumber,
-      vehicleNumber,
-      fromLocation,
-      toLocation,
-      email,
-      phoneNumber,
-      seatCount,
-      password,
-    });
+  // const handleRegister = () => {
+  //   // Implement your registration logic here
+  //   console.log('Registration details:', {
+  //     driverNumber,
+  //     conductorNumber,
+  //     vehicleNumber,
+  //     fromLocation,
+  //     toLocation,
+  //     email,
+  //     phoneNumber,
+  //     seatCount,
+  //     password,
+  //   });
+  // };
+
+  const handleRegister = async () => {
+    // Handle the payment logic here
+    // console.log("Payment details =>", {
+    //   name,
+    //   cardNumber,
+    //   cvv,
+    //   expiry,
+    // });
+
+    try {
+      const response = await post("buses", {
+        driverNumber,
+        conductorNumber,
+        busNumber: vehicleNumber,
+        type: 'Luxury',
+        from: fromLocation,
+        to: toLocation,
+        email,
+        busName,
+        routeNumber ,
+        estimatedTime,
+        phoneNumber,
+        seatCount,
+        password,
+        amenities
+      });
+      // Assert the type of booking.data
+      // const bookingData = response.data as { _id: string };
+      console.log("regesterd successfuly",response);
+
+      // Redirect to the success screen
+      router.push("/(routes)/login");
+    } catch (error) {
+      // generate toast here
+      console.error("Error during bus registration:", error);
+      // Handle error appropriately, e.g., show an alert or notification
+    }
   };
 
   return (

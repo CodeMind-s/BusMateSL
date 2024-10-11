@@ -144,7 +144,7 @@ const TabLayout = () => {
             tabBarLabel: "Profile",
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="person" size={size} color={color} />
-            ),
+            )
           }}
         />
       </Tabs>

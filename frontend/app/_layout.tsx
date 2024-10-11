@@ -116,17 +116,20 @@ const RootLayout = () => {
                   title="Intercity Schedules"
                 />
               ),
+
             }}
           />
           <Stack.Screen
             name="(routes)/privatebus_schedules/index"
             options={{
+
               header: () => (
                 <CustomHeader
                   onBack={() => router.back()}
                   title="Private Bus Schedules"
                 />
               ),
+
             }}
           />
           <Stack.Screen
@@ -138,17 +141,20 @@ const RootLayout = () => {
                   title="SLTB Schedules"
                 />
               ),
+
             }}
           />
           <Stack.Screen
             name="(routes)/highway_schedules_details/index"
             options={{
+
               header: () => (
                 <CustomHeader
                   onBack={() => router.back()}
                   title="Highway Schedule Details"
                 />
               ),
+
             }}
           />
           <Stack.Screen
@@ -182,6 +188,7 @@ const RootLayout = () => {
                   title="Private Bus Schedule Details"
                 />
               ),
+
             }}
           />
           <Stack.Screen
@@ -193,28 +200,33 @@ const RootLayout = () => {
                   title="Book Ticket"
                 />
               ),
+
             }}
           />
           <Stack.Screen
             name="(routes)/tickets/bus-details/[id]"
             options={{
+
               header: () => (
                 <CustomHeader
                   onBack={() => router.back()}
                   title="Bus Details"
                 />
               ),
+
             }}
           />
           <Stack.Screen
             name="(routes)/tickets/bus-seating/[id]"
             options={{
+
               header: () => (
                 <CustomHeader
                   onBack={() => router.back()}
                   title="Bus Seat Selection"
                 />
               ),
+
             }}
           />
           <Stack.Screen
@@ -223,6 +235,7 @@ const RootLayout = () => {
               header: () => (
                 <CustomHeader onBack={() => router.back()} title="Checkout" />
               ),
+
             }}
           />
           <Stack.Screen
@@ -274,6 +287,7 @@ const RootLayout = () => {
         </Stack>
       </TicketProvider>
     </AuthProvider>
+
   );
 };
 
@@ -284,6 +298,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ onBack, title }) => (
         <Ionicons name="arrow-back-circle-outline" size={28} color="white" />
       </TouchableOpacity>
     )}
+
     {/* Apply the title prop to the header text */}
     <Text style={styles.headerText}>{title}</Text>
   </View>
