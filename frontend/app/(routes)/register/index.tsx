@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import RegisterScreen from "@/screens/register/register.screen";
 
-const index = () => {
+const RegisterPage = () => {
   return (
     <View>
       <RegisterScreen />
@@ -10,4 +10,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default RegisterPage;
