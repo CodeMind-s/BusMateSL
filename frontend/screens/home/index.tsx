@@ -120,9 +120,8 @@ const Home = () => {
           Quick Actions
         </Text>
         <View className=" flex flex-row justify-between">
-          <View className="h-full w-[48%] relative bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
-            <TouchableOpacity
-              onPress={() => router.push("/(routes)/schedules")}
+          <TouchableOpacity onPress={() => router.push("/(routes)/schedules")} className="h-full w-[48%] relative bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
+            <View
               className="absolute right-0 top-0 w-[80px] h-[80px] bg-primary rounded-tr-xl rounded-bl-[100px]  flex items-center justify-center"
             >
               <Ionicons
@@ -130,15 +129,15 @@ const Home = () => {
                 size={28}
                 color="white"
               />
-            </TouchableOpacity>
+            </View>
             <Ionicons name="calendar" size={35} color="#23252E" />
             <Text className="text-[#23252E] text-[21px] font-bold mt-2">
               Schedules
             </Text>
-          </View>
-          <View className="h-full w-[48%] bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
-            <TouchableOpacity
-              onPress={() => router.push("/(routes)/tickets/ticket")}
+          </TouchableOpacity>
+          <TouchableOpacity
+              onPress={() => router.push("/(routes)/tickets/ticket")} className="h-full w-[48%] bg-tertiary my-1 justify-center items-left px-3 rounded-xl">
+            <View
               className="absolute right-0 top-0 w-[80px] h-[80px] bg-primary rounded-tr-xl rounded-bl-[100px]  flex items-center justify-center"
             >
               <Ionicons
@@ -146,12 +145,12 @@ const Home = () => {
                 size={28}
                 color="white"
               />
-            </TouchableOpacity>
+            </View>
             <Ionicons name="ticket" size={35} color="#23252E" />
             <Text className="text-[#23252E] text-[21px] font-bold mt-2">
               Book Seats
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

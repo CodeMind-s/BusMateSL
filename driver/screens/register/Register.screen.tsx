@@ -1,7 +1,7 @@
 import { post } from '@/helpers/api';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
 
 const RegisterScreen = () => {
   const [driverNumber, setDriverNumber] = useState('');
@@ -13,34 +13,15 @@ const RegisterScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [seatCount, setSeatCount] = useState('');
   const [password, setPassword] = useState('');
-  const [busName, setBusName] = useState('bus123');
-  const [routeNumber, setRouteNumber] = useState('1');
-  const [estimatedTime, setEstimatedTime] = useState('00');
+  const [password1, setPassword1] = useState('');
+  const [busName, setBusName] = useState('');
+  const [routeNumber, setRouteNumber] = useState('');
+  const [estimatedTime, setEstimatedTime] = useState('');
   const [amenities, setAmenities] = useState([]);
-
-  // const handleRegister = () => {
-  //   // Implement your registration logic here
-  //   console.log('Registration details:', {
-  //     driverNumber,
-  //     conductorNumber,
-  //     vehicleNumber,
-  //     fromLocation,
-  //     toLocation,
-  //     email,
-  //     phoneNumber,
-  //     seatCount,
-  //     password,
-  //   });
-  // };
+  const [isFormValid, setIsFormValid] = useState(false); 
+  const [formError, setFormError] = useState('')
 
   const handleRegister = async () => {
-    // Handle the payment logic here
-    // console.log("Payment details =>", {
-    //   name,
-    //   cardNumber,
-    //   cvv,
-    //   expiry,
-    // });
 
     try {
       const response = await post("buses", {
@@ -59,24 +40,96 @@ const RegisterScreen = () => {
         password,
         amenities
       });
-      // Assert the type of booking.data
-      // const bookingData = response.data as { _id: string };
       console.log("regesterd successfuly",response);
+      Alert.alert("Success", "Registered successfully.");
 
-      // Redirect to the success screen
       router.push("/(routes)/login");
     } catch (error) {
-      // generate toast here
       console.error("Error during bus registration:", error);
-      // Handle error appropriately, e.g., show an alert or notification
     }
   };
 
+  useEffect(() => {
+    validateForm();
+  }, [driverNumber, conductorNumber, vehicleNumber, fromLocation, toLocation, email, phoneNumber, password, password1, routeNumber]);
+
+  const validateForm = () => {
+    const phoneRegex = /^[0-9]{10}$/;
+    const vehicleRegex = /^[A-Za-z0-9]{7}$/;
+    const locationRegex = /^[A-Za-z ]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{5,}$/;
+
+    const isValidDriverNumber = phoneRegex.test(driverNumber);
+    const isValidConductorNumber = phoneRegex.test(conductorNumber);
+    const isValidVehicleNumber = vehicleRegex.test(vehicleNumber);
+    const isValidEmail = email.includes('@') && email.includes('.');
+    const isValidPhoneNumber = phoneRegex.test(phoneNumber);
+    const isValidRouteNumber = routeNumber.length <= 3 && /^[0-9]+$/.test(routeNumber);
+    const isValidPassword = passwordRegex.test(password);
+    const isPasswordsMatch = password === password1;
+
+    setIsFormValid(
+      isValidDriverNumber &&
+      isValidConductorNumber &&
+      isValidVehicleNumber &&
+      isValidEmail &&
+      isValidPhoneNumber &&
+      isValidRouteNumber &&
+      isValidPassword &&
+      isPasswordsMatch
+    );
+
+    if(!isValidDriverNumber){
+      setFormError("Driver number must 10 numbers!")
+    }
+    else if(!isValidConductorNumber){
+      setFormError("Conductor number must 10 numbers!")
+    }
+    else if(!isValidVehicleNumber){
+      setFormError("Invalide Vehicle number!")
+    }
+    else if(!isValidEmail){
+      setFormError("Invalide Email Address!")
+    }
+    else if(!isValidPhoneNumber){
+      setFormError("Invalide Phone Number!")
+    }
+    else if(!isValidRouteNumber){
+      setFormError("Invalide Route Number!")
+    }
+    else if(!isValidPassword){
+      setFormError("Password must contain at least one uppercase letter, one lowercase letter, one number, one symbol, and be at least 5 characters long!")
+    }
+    else if(!isPasswordsMatch){
+      setFormError("Passwords mismatch!")
+    }
+    else{
+      setFormError("")
+    }
+  };
+
+  const [emailError, setEmailError] = useState(false); 
+
+    const validateEmail = (email: string) => {
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailPattern.test(email);
+    };
+
+
+
+  const validatePassword = (password: string) => {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+    return passwordPattern.test(password);
+  };
+
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20, backgroundColor: '#F9FAFB' }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#333', marginBottom: 20,marginTop: 30, textAlign: 'center' }}>
-        Register
-      </Text>
+      <Image
+          source={require("../../assets/images/logo.png")} 
+          className="w-32 h-16 mx-auto mb-3"
+          resizeMode="contain"
+        />
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
         <View style={{ flex: 1, marginRight: 10 }}>
@@ -90,9 +143,9 @@ const RegisterScreen = () => {
               paddingHorizontal: 15,
               backgroundColor: '#FFF',
             }}
-            placeholder="Enter Driver Number"
+            placeholder="735xxxxxxx"
             value={driverNumber}
-            onChangeText={setDriverNumber}
+            onChangeText={text => setDriverNumber(text.replace(/[^0-9]/g, '').slice(0, 10))}
             keyboardType="numeric"
           />
         </View>
@@ -107,34 +160,57 @@ const RegisterScreen = () => {
               paddingHorizontal: 15,
               backgroundColor: '#FFF',
             }}
-            placeholder="Enter Conductor Number"
+            placeholder="785xxxxxxx"
             value={conductorNumber}
-            onChangeText={setConductorNumber}
+            onChangeText={text => setConductorNumber(text.replace(/[^0-9]/g, '').slice(0, 10))}
             keyboardType="numeric"
           />
         </View>
       </View>
 
-      <View style={{ marginBottom: 15 }}>
-        <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Vehicle Number</Text>
-        <TextInput
-          style={{
-            height: 50,
-            borderColor: '#ccc',
-            borderWidth: 1,
-            borderRadius: 8,
-            paddingHorizontal: 15,
-            backgroundColor: '#FFF',
-          }}
-          placeholder="Enter Vehicle Number"
-          value={vehicleNumber}
-          onChangeText={setVehicleNumber}
-        />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
+        <View style={{ flex: 1, marginRight: 10 }}>
+          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Vehicle Number</Text>
+          <TextInput
+            style={{
+              height: 50,
+              borderColor: '#ccc',
+              borderWidth: 1,
+              borderRadius: 8,
+              paddingHorizontal: 15,
+              backgroundColor: '#FFF',
+            }}
+            placeholder="Enter Vehicle No."
+            value={vehicleNumber}
+            onChangeText={text => {
+              const letters = text.replace(/[^A-Za-z]/g, '').slice(0, 3);
+              const numbers = text.replace(/[^0-9]/g, '').slice(0, 4);
+              setVehicleNumber(letters + numbers);
+            }}
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Seat Count</Text>
+          <TextInput
+            style={{
+              height: 50,
+              borderColor: '#ccc',
+              borderWidth: 1,
+              borderRadius: 8,
+              paddingHorizontal: 15,
+              backgroundColor: '#FFF',
+            }}
+            placeholder="Enter Seat Count"
+            value={seatCount}
+            onChangeText={setSeatCount}
+            keyboardType="numeric"
+          />
+        </View>
       </View>
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
         <View style={{ flex: 1, marginRight: 10 }}>
-          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>From Location</Text>
+          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Start Location</Text>
           <TextInput
             style={{
               height: 50,
@@ -144,13 +220,16 @@ const RegisterScreen = () => {
               paddingHorizontal: 15,
               backgroundColor: '#FFF',
             }}
-            placeholder="Enter From Location"
+            placeholder="From"
             value={fromLocation}
-            onChangeText={setFromLocation}
+            onChangeText={text => {
+              const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+              setFromLocation(filteredText);
+            }}
           />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>To Location</Text>
+          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>End Location</Text>
           <TextInput
             style={{
               height: 50,
@@ -160,9 +239,51 @@ const RegisterScreen = () => {
               paddingHorizontal: 15,
               backgroundColor: '#FFF',
             }}
-            placeholder="Enter To Location"
+            placeholder="Destination"
             value={toLocation}
-            onChangeText={setToLocation}
+            onChangeText={text => {
+              const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+              setToLocation(filteredText);
+            }}
+          />
+        </View>
+      </View>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
+        <View style={{ flex: 1, marginRight: 10 }}>
+          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Route Number</Text>
+          <TextInput
+            style={{
+              height: 50,
+              borderColor: '#ccc',
+              borderWidth: 1,
+              borderRadius: 8,
+              paddingHorizontal: 15,
+              backgroundColor: '#FFF',
+            }}
+            placeholder="14"
+            value={routeNumber}
+            onChangeText={text => setRouteNumber(text.replace(/[^0-9]/g, '').slice(0, 3))}
+            keyboardType='numeric'
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Estimated Time</Text>
+          <TextInput
+            style={{
+              height: 50,
+              borderColor: '#ccc',
+              borderWidth: 1,
+              borderRadius: 8,
+              paddingHorizontal: 15,
+              backgroundColor: '#FFF',
+            }}
+            placeholder="2H 30Min"
+            value={estimatedTime}
+            onChangeText={text => {
+              const filteredText = text.replace(/[^0-9HM\s]/g, ''); 
+              setEstimatedTime(filteredText);
+            }}
           />
         </View>
       </View>
@@ -172,7 +293,7 @@ const RegisterScreen = () => {
         <TextInput
           style={{
             height: 50,
-            borderColor: '#ccc',
+            borderColor: emailError ? 'red' : '#ccc',
             borderWidth: 1,
             borderRadius: 8,
             paddingHorizontal: 15,
@@ -180,7 +301,10 @@ const RegisterScreen = () => {
           }}
           placeholder="Enter Email"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={text => {
+            setEmail(text);
+            setEmailError(!validateEmail(text)); // Set error state based on validation
+          }}
           keyboardType="email-address"
         />
       </View>
@@ -198,13 +322,13 @@ const RegisterScreen = () => {
           }}
           placeholder="Enter Phone Number"
           value={phoneNumber}
-          onChangeText={setPhoneNumber}
+          onChangeText={text => setPhoneNumber(text.replace(/[^0-9]/g, '').slice(0, 10))}
           keyboardType="phone-pad"
         />
       </View>
 
       <View style={{ marginBottom: 15 }}>
-        <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Seat Count</Text>
+        <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Bus Name</Text>
         <TextInput
           style={{
             height: 50,
@@ -215,9 +339,8 @@ const RegisterScreen = () => {
             backgroundColor: '#FFF',
           }}
           placeholder="Enter Seat Count"
-          value={seatCount}
-          onChangeText={setSeatCount}
-          keyboardType="numeric"
+          value={busName}
+          onChangeText={setBusName}
         />
       </View>
 
@@ -239,7 +362,27 @@ const RegisterScreen = () => {
         />
       </View>
 
-      <TouchableOpacity
+      <View style={{ marginBottom: 15 }}>
+        <Text style={{ marginBottom: 5, color: '#333', fontWeight: '600' }}>Re-Enter Password</Text>
+        <TextInput
+          style={{
+            height: 50,
+            borderColor: '#ccc',
+            borderWidth: 1,
+            borderRadius: 8,
+            paddingHorizontal: 15,
+            backgroundColor: '#FFF',
+          }}
+          placeholder="Enter Password"
+          value={password1}
+          onChangeText={setPassword1}
+          secureTextEntry
+        />
+      </View>
+
+      {!isFormValid && (<Text className=' text-red-500'>{formError}</Text>)}
+
+      {isFormValid ? (<TouchableOpacity
         style={{
           backgroundColor: '#007BFF',
           padding: 15,
@@ -250,7 +393,19 @@ const RegisterScreen = () => {
         onPress={handleRegister}
       >
         <Text style={{ color: '#FFF', fontSize: 18, fontWeight: '600' }}>Register</Text>
+      </TouchableOpacity>) : (
+        <TouchableOpacity
+        style={{
+          backgroundColor: '#A1A1A1',
+          padding: 15,
+          borderRadius: 8,
+          alignItems: 'center',
+          marginTop: 20,
+        }}
+      >
+        <Text style={{ color: '#FFF', fontSize: 18, fontWeight: '600' }}>Register</Text>
       </TouchableOpacity>
+      )}
     </ScrollView>
   );
 };

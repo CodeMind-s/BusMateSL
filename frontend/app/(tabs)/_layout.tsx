@@ -142,6 +142,13 @@ const TabLayout = () => {
           options={{
             title: "Profile",
             tabBarLabel: "Profile",
+            headerStyle: {
+              backgroundColor: "#23252E",
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+              height: 100,
+              shadowColor: "#23252E",
+            },
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="person" size={size} color={color} />
             )

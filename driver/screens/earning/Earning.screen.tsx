@@ -33,6 +33,7 @@ const chartConfig = {
 };
 
 const EarningScreen = () => {
+
   if (!weekData || !weekData.datasets || !weekData.datasets[0].data || weekData.datasets[0].data.length === 0) {
     return <Text>No data available</Text>; 
   }

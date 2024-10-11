@@ -12,6 +12,7 @@ interface ScheduleListCardComponentProps {
   startTime: string;
   endTime: string;
   status: string; // Make status required
+  btn: boolean;
 }
 
 // Define the functional component
@@ -22,6 +23,7 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
   startTime,
   endTime,
   status,
+  btn
 }) => {
   // Function to update schedule status
   const onUpdateStatus = async (newStatus: string) => {
@@ -45,11 +47,13 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
   };
 
   // Function to handle marking as complete
+  const handleMarkAsInprogress = () => {
+    onUpdateStatus("InProgress");
+    router.push("/(tabs)/track-bus");
+  };
+
   const handleMarkAsComplete = () => {
     onUpdateStatus("Complete");
-  };
-  const handleMarkAsInProgress = () => {
-    onUpdateStatus("InProgress");
   };
 
   return (
@@ -72,26 +76,26 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
           <Text className="text-sm text-[#A1A1A1]">{to}</Text>
         </View>
       </View>
-      {(status === "InProgress") && (
+      {btn == true && status === "InComplete" && (
         <View className="mt-3">
           <TouchableOpacity
             className="w-full flex justify-center items-center border-green-500 border rounded-lg"
-            onPress={handleMarkAsComplete}
+            onPress={handleMarkAsInprogress}
           >
             <Text className="text-sm font-semibold py-2 px-6 text-green-500">
-              Mark as Complete
+              Start Route
             </Text>
           </TouchableOpacity>
         </View>
       )}
-      {(status === "InComplete" ) && (
+      {btn == true && status === "InProgress" && (
         <View className="mt-3">
           <TouchableOpacity
-            className="w-full flex justify-center items-center border-yellow-500 border rounded-lg"
-            onPress={handleMarkAsInProgress}
+            className="w-full flex justify-center items-center border-orange-500 border rounded-lg"
+            onPress={handleMarkAsComplete}
           >
-            <Text className="text-sm font-semibold py-2 px-6 text-yellow-500">
-              Start Journey
+            <Text className="text-sm font-semibold py-2 px-6 text-orange-500">
+              Mark as Complete
             </Text>
           </TouchableOpacity>
         </View>

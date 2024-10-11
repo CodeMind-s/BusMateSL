@@ -64,13 +64,13 @@ const RootLayout = () => {
         <Stack.Screen 
           name="(routes)/login/index" 
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Login"/>,
+            header: () => <CustomHeader onBack={() => null} title="Login"/>,
           }} 
         />
         <Stack.Screen 
           name="(routes)/register/index" 
           options={{
-            header: () => <CustomHeader onBack={() => router.back()} title="Register"/>,
+            header: () => <CustomHeader onBack={() => null} title="Register"/>,
           }} 
         />
         <Stack.Screen 
@@ -87,9 +87,12 @@ const RootLayout = () => {
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({ onBack, title }) => (
   <View style={styles.headerContainer}>
-    <TouchableOpacity onPress={onBack} style={styles.backButton}>
+     {title !== "Login" && title !== "Register" && title !== "Ticket Details" && (
+      <TouchableOpacity onPress={onBack} style={styles.backButton}>
       <Ionicons name="arrow-back-circle-outline" size={28} color="white" />
     </TouchableOpacity>
+     )}
+
     {/* Apply the title prop to the header text */}
     <Text style={styles.headerText}>{title}</Text>
   </View>

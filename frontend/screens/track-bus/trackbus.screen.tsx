@@ -61,24 +61,24 @@ const TrackbusScreen = () => {
   const [buses, setBuses] = useState<Buses>( {
     1: {
       number: "BD 1234",
-      currentTown: "Malabe",
-      routeNumber: 177,
-      longitude: 79.966899,
-      magnitude: 6.908134,
+      currentTown: "Negombo",
+      routeNumber: 4,
+      longitude: 79.845705,
+      magnitude: 7.216162, 
     },
     2: {
       number: "DF 3425",
-      currentTown: "Koswatte",
-      routeNumber: 177,
-      longitude: 79.914199,
-      magnitude: 6.902851, 
+      currentTown: "Marawila",
+      routeNumber: 4,
+      longitude:  79.829983,
+      magnitude: 7.420079,
     },
     3: {
       number: "PK 1276",
-      currentTown: "Rajagiriya",
-      routeNumber: 177,
-      longitude: 79.876777,
-      magnitude: 6.911542, 
+      currentTown: "Chilaw",
+      routeNumber: 4,
+      longitude: 79.798398,
+      magnitude: 7.590951,  
     }});
   const [busesInRoute, setBusesInRoute] = useState('');
   const [isBusesInRouteActive, setIsBusesInRouteActive] = useState(false);
@@ -200,7 +200,7 @@ const TrackbusScreen = () => {
     setIsBusesInRouteActive(true);
     setIsBusdetailWindowActive(true);
 
-    if(startLocation=== 'Kaduwela' && destinationLocation==='Kollupitiya'){
+    if(startLocation=== 'Colombo' && destinationLocation==='Puttalam'){
       const busMarkersScript = Object.keys(buses).map((busKey) => {
         const bus = buses[busKey];
         return `
@@ -348,21 +348,27 @@ const TrackbusScreen = () => {
       )}
 
       {isSearchResultActive && (
-        <TouchableOpacity onPress={()=>SetIsSearchResultActive(false)} className=' absolute top-12 right-2 flex justify-center items-center bg-swhite p-1 rounded-full shadow-xl shadow-black'>
-          <Ionicons name="close-sharp" size={24} color="black" />
+        <TouchableOpacity onPress={()=>SetIsSearchResultActive(false)} className=' absolute top-4 left-[36%] px-3 flex justify-center items-center bg-primary py-1 rounded-full shadow-xl shadow-black'>
+          <View className=' flex flex-row justify-center items-center '>
+            <Ionicons name="close-sharp" size={14} color="white" />
+            <Text className=' text-white ml-1'>Clear Result</Text>
+          </View>
         </TouchableOpacity>
       )}
 
       {isBusdetailWindowActive && (
-        <TouchableOpacity onPress={busResultCloseHandler} className=' absolute top-12 right-2 flex justify-center items-center bg-swhite p-1 rounded-full shadow-xl shadow-black'>
-          <Ionicons name="close-sharp" size={24} color="black" />
-        </TouchableOpacity>
+        <TouchableOpacity onPress={busResultCloseHandler} className=' absolute top-4 left-[36%] px-3 flex justify-center items-center bg-primary py-1 rounded-full shadow-xl shadow-black'>
+        <View className=' flex flex-row justify-center items-center '>
+          <Ionicons name="close-sharp" size={14} color="white" />
+          <Text className=' text-white ml-1'>Clear Result</Text>
+        </View>
+      </TouchableOpacity>
       )}
 
       {isSearchResultActive && !isBusesInRouteActive && (
         <View className=' w-full absolute bottom-4 left-0 flex justify-center items-center'>
           <TouchableOpacity onPress={()=>routeBusHandller()} className=' bg-primary h-16 w-11/12 rounded-lg flex flex-row justify-center items-center'>
-            <Text className=' text-center font-bold text-white text-2xl mr-5'>{startLocation} - {destinationLocation}</Text>
+            <Text className=' text-center font-bold text-white text-xl mr-5'>Track Buses in Real-Time</Text>
             <FontAwesome6 name="route" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -389,7 +395,7 @@ const TrackbusScreen = () => {
       {/* sos box */}
       {isSosOn &&(<SosModal setIsSosOn={setIsSosOn}/>)}
       
-      {isBusdetailWindowActive && startLocation==='Kaduwela' && destinationLocation==='Kollupitiya' && (
+      {isBusdetailWindowActive && startLocation==='Colombo' && destinationLocation==='Puttalam' && (
         <BusdetailWindow setIsBusdetailWindowActive={setIsBusdetailWindowActive} />
       )}
 
@@ -451,14 +457,14 @@ const BusdetailWindow: React.FC<BusdetailWindow> = ({ setIsBusdetailWindowActive
           className='h-14 w-14 rounded-full' 
         />
         <View className='w-[80%] pl-2'>
-          <Text className='text-primary text-lg font-bold'>177 Kaduwela - Kollupitiya</Text>
+          <Text className='text-primary text-lg font-bold'>04 Colombo - Puttalam</Text>
           <Text className='text-[#A6A6A6] text-base'>Sri Lanka Transport Board</Text>
         </View>
       </View>
       <View>
-        <BusInfo busNumber="PK 1276" location="Rajagiriya" />
-        <BusInfo busNumber="DF 3425" location="Koswatte" />
-        <BusInfo busNumber="BG 1234" location="Malabe" />
+        <BusInfo busNumber="PK 1276" location="Negombo" />
+        <BusInfo busNumber="DF 3425" location="Marawila" />
+        <BusInfo busNumber="BG 1234" location="Chilaw" />
       </View>
     </View>
   );
@@ -489,16 +495,16 @@ const BusArrivalInfo: React.FC<BusArrivalInfoProps> = ({ setIsBusClick }) => {
           className='h-14 w-14 rounded-full' 
         />
         <View className='w-[80%] pl-2'>
-          <Text className='text-primary text-lg font-bold'>177 Kaduwela - Kollupitiya</Text>
+          <Text className='text-primary text-lg font-bold'>04 Colombo - Puttalam</Text>
           <Text className='text-[#A6A6A6] text-base'>Sri Lanka Transport Board</Text>
         </View>
       </View>
       <View className='mt-4'>
-        <ArrivalTime town='Kollupitiya (Station Road)' time='11.00 AM' pass='not'/>
-        <ArrivalTime town='Rajagiriya' time='10.30 AM' pass='not'/>
-        <ArrivalTime town='Koswatte' time='10.00 AM' pass='pass'/>
-        <ArrivalTime town='Malabe' time='9.30 AM' pass='pass'/>
-        <ArrivalTime town='Kaduwela' time='9.00 AM' pass='pass'/>
+        <ArrivalTime town='Puttalam (Station Road)' time='11.00 AM' pass='not'/>
+        <ArrivalTime town='Chilaw' time='10.30 AM' pass='not'/>
+        <ArrivalTime town='Marawila' time='10.00 AM' pass='pass'/>
+        <ArrivalTime town='Negombo' time='9.30 AM' pass='pass'/>
+        <ArrivalTime town='Colombo' time='9.00 AM' pass='pass'/>
       </View>
     </View>
   );

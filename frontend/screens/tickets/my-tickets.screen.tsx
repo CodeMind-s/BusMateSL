@@ -186,7 +186,7 @@ const MyTickets = () => {
                     </View>
                 ))
             ) : (
-                <Text>No bookings found.</Text>
+                <Text className=' text-center mt-[90%] '>No bookings found.</Text>
             )}
 
             {/* QR Code Modal */}

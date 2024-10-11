@@ -114,24 +114,24 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <View className="h-[120vh] bg-swhite -mt-9 py-4">
+    <View className="h-[120vh] bg-swhite">
       {/* Dark Background Header */}
-      <View className="flex items-center justify-start rounded-b-2xl mb-4">
+      <View className="flex items-center justify-start bg-Secondary rounded-b-2xl -mt-6 py-6 mb-4">
         <TouchableOpacity onPress={pickImage} className="relative">
           <Image
             source={{ uri: profileImage }}
             className="w-24 h-24 rounded-full mb-4"
           />
-          <View className="absolute bottom-0 right-0 bg-primary rounded-full p-1">
+          {/* <View className="absolute bottom-0 right-0 bg-primary rounded-full p-1">
             <Ionicons name="camera" size={20} color="white" />
-          </View>
+          </View> */}
         </TouchableOpacity>
       </View>
 
       {/* Form Fields */}
-      <ScrollView className="flex-1">
-        <View className="mb-4">
-          <Text className="mb-2 text-lg font-bold">Name</Text>
+      <ScrollView className="flex-1 px-4">
+        <View className="mb-3">
+          <Text className="mb-1 text-base font-semibold">Name</Text>
           <TextInput
             value={name}
             onChangeText={setName}
@@ -140,19 +140,19 @@ const EditProfileScreen = () => {
         </View>
 
 
-        <View className="mb-4">
-          <Text className="mb-2 text-lg font-bold">Email</Text>
+        <View className="mb-3">
+          <Text className="mb-1 text-base font-semibold">Email</Text>
           <TextInput
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
-            className="border border-gray-300 p-3 rounded-lg bg-white"
+            className="border border-gray-300 text-sm p-3 rounded-lg bg-white"
 
           />
         </View>
 
-        <View className="mb-4">
-          <Text className="mb-2 text-lg font-bold">Date of Birth</Text>
+        <View className="mb-3">
+          <Text className="mb-1 text-base font-semibold">Date of Birth</Text>
           <TouchableOpacity
             onPress={() => setShowDatePicker(true)}
             className="border border-gray-300 p-3 rounded-lg bg-white"
@@ -169,8 +169,8 @@ const EditProfileScreen = () => {
           )}
         </View>
 
-        <View className="mb-4">
-          <Text className="mb-2 text-lg font-bold">Gender</Text>
+        <View className="mb-3">
+          <Text className="mb-1 text-base font-semibold">Gender</Text>
           <View className="border border-gray-300 rounded-lg bg-white">
             <TextInput
               value={"Male"}
@@ -179,8 +179,8 @@ const EditProfileScreen = () => {
             />
           </View>
         </View>
-        <View className="mb-4">
-          <Text className="mb-2 text-lg font-bold">Contact</Text>
+        <View className="mb-3">
+          <Text className="mb-1 text-base font-semibold">Contact</Text>
           <View className="border border-gray-300 rounded-lg bg-white">
             <TextInput
               value={contact}

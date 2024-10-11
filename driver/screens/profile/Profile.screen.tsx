@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Linking from 'expo-linking';
@@ -35,7 +35,7 @@ const ProfileScreen = () => {
     try {
         const response = await post(`buses/logout`, {}); 
         if (response.status === 200) {
-            // console.log("Logout successful", response);
+          Alert.alert("Success", "Logout successfully.");
             router.push("/(routes)/login");
         } else {
             console.error("Logout failed: unexpected response", response);

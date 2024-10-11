@@ -68,7 +68,7 @@ const NotificationScreen = () => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 20 }}>
+    <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 20, paddingHorizontal: 20 }}>
       {/* Read/Unread Toggle */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 }}>
         <TouchableOpacity onPress={() => setShowRead(false)}>
