@@ -92,7 +92,7 @@ const isSameDay = (date1: Date, date2: Date) => {
   }, []);
 
   return (
-    <View className=' p-5'>
+    <View className=' p-4'>
         <View className="flex flex-row">
             <Image 
                 source={{ uri: 'https://t4.ftcdn.net/jpg/02/18/58/51/360_F_218585163_hKijGOfFIkC3Fuo9JgX2sVGv69UKoXmM.jpg' }} 
@@ -109,28 +109,28 @@ const isSameDay = (date1: Date, date2: Date) => {
 
       <TouchableOpacity
         onPress={() => router.push("/(tabs)/track-bus")}
-        className=" w-full py-5 bg-primary rounded-xl mt-6"
+        className=" w-full py-4 bg-primary rounded-xl mt-5"
       >
         <Text className=" text-center text-[20px] font-semibold text-white">
           Switch On Location
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity className=" w-full py-5 bg-primary rounded-xl mt-6">
+      <TouchableOpacity className=" w-full py-4 bg-primary rounded-xl mt-5">
         <Text className=" text-center text-[20px] font-semibold text-white">
           Scan Ticket
         </Text>
       </TouchableOpacity>
 
       <View className=" flex flex-row justify-between items-center">
-        <TouchableOpacity className=" w-[47%] py-5 bg-primary rounded-xl mt-6">
+        <TouchableOpacity className=" w-[47%] py-4 bg-primary rounded-xl mt-5">
           <Text className=" text-center text-[18px] font-semibold text-white">
             Booked Seats
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => router.push("/(routes)/announcement")}
-          className=" w-[47%] py-5 bg-primary rounded-xl mt-6"
+          className=" w-[47%] py-4 bg-primary rounded-xl mt-5"
         >
           <Text className=" text-center text-[18px] font-semibold text-white">
             Announcement
@@ -138,7 +138,7 @@ const isSameDay = (date1: Date, date2: Date) => {
         </TouchableOpacity>
       </View>
 
-      <Text className=" mt-4 font-semibold text-lg">Current Journey</Text>
+      <Text className=" mt-3 font-semibold text-lg">Current Journey</Text>
       {(schedules.length > 0 &&
             schedules.some((schedule) => schedule.status === "InProgress")
           ) ? (
@@ -156,6 +156,7 @@ const isSameDay = (date1: Date, date2: Date) => {
                     startTime={schedule.startTime}
                     endTime={schedule.endTime}
                     status={schedule.status}
+                    btn={true}
                   />
                 </View>
               ))
@@ -163,7 +164,7 @@ const isSameDay = (date1: Date, date2: Date) => {
             <Text>No schedules Found</Text>
           )}
 
-      <View className=" mt-6 bg-gray-200 rounded-xl p-3">
+      <View className=" mt-5 bg-gray-200 rounded-xl p-3">
         <Text className=" text-[#5e5e5e] text-base">
           Monthly Earning so far,{" "}
         </Text>
