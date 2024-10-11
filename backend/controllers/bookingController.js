@@ -44,8 +44,14 @@ const createBooking = asyncHandler(async (req, res) => {
 // @route   GET /api/bookings
 const getAllBookings = asyncHandler(async (req, res) => {
   const bookings = await Booking.find()
-    .populate("schedule", "bus startLocation startTime endLocation endTime")
-    .populate("user", "name email");
+    .populate({
+      path: "schedule",
+      select: "bus startLocation startTime endLocation endTime _id", // Include _id to return the schedule ID
+    })
+    .populate({
+      path: "user",
+      select: "name email",
+    });
 
   if (bookings.length > 0) {
     res.status(200).json(bookings);
@@ -57,15 +63,21 @@ const getAllBookings = asyncHandler(async (req, res) => {
 // @desc    Get all bookings for a user
 // @route   GET /api/bookings/user/:userId
 const getBookingsByUser = asyncHandler(async (req, res) => {
-  const bookings = await Booking.find(req.params.userId).populate(
-    "schedule",
-    "bus startLocation startTime endLocation endTime"
-  );
-
+  const bookings = await Booking.find({ user: req.params.id })
+    .populate({
+      path: "schedule",
+      select:
+        "startLocation startTime endLocation endTime price date status bus",
+      populate: {
+        path: "bus",
+        select: "busNumber",
+      },
+    })
+    .populate("user", "name email");
   if (bookings.length > 0) {
     res.status(200).json(bookings);
   } else {
-    res.status(404).json({ message: "No bookings found" });
+    res.status(404).json({ message: "No bookings found for this user" });
   }
 });
 
