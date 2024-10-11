@@ -38,6 +38,12 @@ const RootLayout = () => {
           }} 
         />
         <Stack.Screen 
+          name="(routes)/addSchedule/index" 
+          options={{
+            header: () => <CustomHeader onBack={() => router.back()} title="Add New Schedule"/>,
+          }} 
+        />
+        <Stack.Screen 
           name="(routes)/addAnnouncement/index" 
           options={{
             header: () => <CustomHeader onBack={() => router.back()} title="Create Announcement"/>,

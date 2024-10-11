@@ -26,6 +26,16 @@ const scheduleSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  date: {
+    type: Date,
+    required: true,
+  },
+  status: {
+      type: String,
+      required: true,
+      default: "InComplete",
+      enum: ["InComplete", "InProgress", "Complete"],
+    },
 });
 
 const Schedule = mongoose.model("Schedule", scheduleSchema);

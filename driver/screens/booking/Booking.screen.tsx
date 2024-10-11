@@ -19,24 +19,11 @@ interface BookingProps {
 
 interface UserProps {
   name: string;
-  email: string;
+  contact: string;
 }
 
 const BookingScreen = () => {
-  // const [currentBus, setCurrentBus] = useState<BusProps | null>(null);
   const [bookings, setBookings] = useState<BookingProps[]>([]);
-
-  // useEffect(() => {
-  //   const fetchBus = async () => {
-  //     try {
-  //       const response = await get(`buses/profile`);
-  //       setCurrentBus(response.data as BusProps);
-  //     } catch (error) {
-  //       console.error("Error fetching bus profile:", error);
-  //     }
-  //   };
-  //   fetchBus();
-  // }, []);
 
   useEffect(() => {
     const fetchBookings = async () => { 
@@ -56,6 +43,7 @@ const BookingScreen = () => {
         bookings.map(booking => ( 
           <View key={booking._id}>
             <Text>{booking.bookedDate}</Text>
+            <Text>{booking.user.contact}</Text>
           </View>
         ))
       ) : (

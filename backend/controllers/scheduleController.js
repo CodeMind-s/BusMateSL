@@ -5,16 +5,18 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 // @desc    Create a new schedule
 // @route   POST /api/schedules
 const createSchedule = asyncHandler(async (req, res) => {
-  const { bus, startLocation, startTime, endLocation, endTime, price } =
+  const { startLocation, startTime, endLocation, endTime, price, date, status } =
     req.body;
 
   const schedule = new Schedule({
-    bus,
+    bus: req.bus._id,
     startLocation,
     startTime,
     endLocation,
     endTime,
     price,
+    date,
+    status,
   });
 
   const createdSchedule = await schedule.save();
@@ -39,7 +41,7 @@ const getAllSchedules = asyncHandler(async (req, res) => {
 // @desc    Get all schedules for a specific bus
 // @route   GET /api/schedules/bus/:busId
 const getAllSchedulesByBus = asyncHandler(async (req, res) => {
-  const schedules = await Schedule.find({ bus: req.params.id })
+  const schedules = await Schedule.find({ bus: req.bus._id })
     .populate("bus", "busNumber from to")
     .sort({ date: -1 });
 
@@ -70,7 +72,7 @@ const getScheduleById = asyncHandler(async (req, res) => {
 // @desc    Update a schedule
 // @route   PUT /api/schedules/:id
 const updateSchedule = asyncHandler(async (req, res) => {
-  const { startLocation, startTime, endLocation, endTime, date, price } =
+  const { startLocation, startTime, endLocation, endTime, date, price,status } =
     req.body;
 
   const schedule = await Schedule.findById(req.params.id);
@@ -81,6 +83,8 @@ const updateSchedule = asyncHandler(async (req, res) => {
     schedule.endLocation = endLocation || schedule.endLocation;
     schedule.endTime = endTime || schedule.endTime;
     schedule.price = price || schedule.price;
+    schedule.date = date || schedule.date;
+    schedule.status = status || schedule.status;
 
     const updatedSchedule = await schedule.save();
     res.status(200).json(updatedSchedule);

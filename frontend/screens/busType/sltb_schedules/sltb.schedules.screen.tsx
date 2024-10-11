@@ -44,7 +44,7 @@ const SLTB_Schedules = () => {
         setTo={setToInput}
         onSubmit={handleSubmit}
       />
-      <ScrollView>
+      <ScrollView  className="px-5">
         {filteredSchedules.map((schedule) => (
           <TouchableOpacity 
             key={schedule.id} 

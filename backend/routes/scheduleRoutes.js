@@ -13,9 +13,9 @@ import { authenticateBus } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").post(createSchedule).get(getAllSchedules);
+router.route("/").post(authenticateBus,createSchedule).get(getAllSchedules);
 
-router.route("/bus/:id").get(getAllSchedulesByBus);
+router.route("/bus").get(authenticateBus, getAllSchedulesByBus);
 
 router
   .route("/:id")

@@ -229,7 +229,7 @@ const RegisterScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

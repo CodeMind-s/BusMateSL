@@ -84,17 +84,30 @@ const getBookingsByUser = asyncHandler(async (req, res) => {
 // @desc    Get all bookings for a bus
 // @route   GET /api/bookings/bus/:busId
 const getBookingsByBus = asyncHandler(async (req, res) => {
-  const bookings = await Booking.find(req.params.busId).populate(
-    "user",
-    "name email"
-  );
+  try {
+    const schedules = await Schedule.find({ bus: req.bus._id })
+      .populate("bus", "busNumber from to")
+      .sort({ date: -1 });
 
-  if (bookings.length > 0) {
-    res.status(200).json(bookings);
-  } else {
-    res.status(404).json({ message: "No bookings found" });
+    if (schedules.length > 0) {
+      const scheduleIds = schedules.map((schedule) => schedule._id);
+      
+      // Find all bookings related to these schedule IDs
+      const bookings = await Booking.find({ schedule: { $in: scheduleIds } })
+        .populate("user", "name contact");
+
+      // Just return the bookings array
+      res.status(200).json(bookings); // Now the response is an array of bookings
+    } else {
+      res.status(404).json({ message: "No schedules found for the specified bus" });
+    }
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ message: "An error occurred while fetching bookings", error: error.message });
   }
 });
+
+
 
 // @desc    Get a single booking by ID
 // @route   GET /api/bookings/:id
