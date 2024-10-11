@@ -55,10 +55,10 @@ const getAllSchedulesByBus = asyncHandler(async (req, res) => {
 // @desc    Get a schedule by ID
 // @route   GET /api/schedules/:id
 const getScheduleById = asyncHandler(async (req, res) => {
-  const schedule = await Schedule.findById(req.params.id).populate(
-    "bus",
-    "busNumber from to"
-  );
+  const schedule = await Schedule.findById(req.params.id).populate({
+    path: "bus",
+    select: "busNumber from to amenities",
+  });
 
   if (schedule) {
     res.status(200).json(schedule);
